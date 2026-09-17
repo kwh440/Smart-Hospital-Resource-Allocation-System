@@ -1,0 +1,24 @@
+# =====================================================================
+# SYSTEM & BUILD REQUIREMENTS
+# Project: Smart Hospital & Resource Allocation System
+# =====================================================================
+
+[Compiler & Language Standards]
+- Language: C
+- Standard: C99 / C11 compliant (ANSI C standard)
+- Compiler: GCC 4.8+, MinGW-w64, Clang 3.8+, or MSVC 2017+
+
+[Development Environment / IDE]
+- Code::Blocks IDE (v20.03 or later recommended with GCC/MinGW)
+- Command Line Terminal (PowerShell / Bash / CMD)
+
+[Standard C Library Dependencies (Built-in)]
+- stdio.h   (Console I/O operations: printf, scanf, fgets, file I/O)
+- stdlib.h  (Memory allocation, process control: system, atoi)
+- string.h  (String manipulation: strcmp, strcpy, strlen, strtok, strcspn)
+- ctype.h   (Character classification: tolower)
+
+[Operating System & Storage]
+- Compatible OS: Windows 10/11, Linux, macOS
+- Disk Permissions: Read/Write access for local `./data/` directory
+- Target Binaries: Pure CLI Console Application (Zero external frameworks)
