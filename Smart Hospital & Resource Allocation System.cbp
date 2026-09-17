@@ -59,6 +59,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/patient.h" />
+		<Unit filename="src/reports.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/reports.h" />
 		<Unit filename="src/ward.c">
 			<Option compilerVar="CC" />
 		</Unit>

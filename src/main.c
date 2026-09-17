@@ -4,11 +4,12 @@
 #include "ward.h"
 #include "bed.h"
 #include "billing.h"
+#include "reports.h"
 #include "file_manager.h"
 
 void displayMenu() {
     printf("\n=======================================================\n");
-    printf("     SMART HOSPITAL & RESOURCE ALLOCATION SYSTEM     \n");
+    printf("        SMART HOSPITAL & RESOURCE ALLOCATION SYSTEM    \n");
     printf("=======================================================\n");
     printf(" 1. Register Patient\n");
     printf(" 2. Display Patients (Registration Order)\n");
@@ -20,10 +21,11 @@ void displayMenu() {
     printf(" 8. Display Beds & Occupancy Metrics\n");
     printf(" 9. Allocate Bed (With Auto-Recommendation)\n");
     printf("10. Discharge Patient & Release Bed\n");
-    printf("11. Calculate Basic Bill\n");
-    printf("12. Exit\n");
+    printf("11. Generate Performance Reports & Analytics\n");
+    printf("12. Calculate Basic Bill\n");
+    printf("13. Exit\n");
     printf("=======================================================\n");
-    printf("Enter your choice (1-12): ");
+    printf("Enter your choice (1-13): ");
 }
 
 int main() {
@@ -38,9 +40,9 @@ int main() {
 
     while (1) {
         displayMenu();
-
+        
         if (scanf("%d", &choice) != 1) {
-            printf("\n[Validation Error] Invalid input! Please enter a number between 1 and 12.\n");
+            printf("\n[Validation Error] Invalid input! Please enter a number between 1 and 13.\n");
             int c;
             while ((c = getchar()) != '\n' && c != EOF);
             continue;
@@ -78,16 +80,19 @@ int main() {
                 releaseBed();
                 break;
             case 11:
-                processBillCalculation();
+                generatePerformanceReport();
                 break;
             case 12:
+                processBillCalculation();
+                break;
+            case 13:
                 printf("\nSaving data records to disk before exiting...\n");
                 savePatientRecords();
                 saveBedStatus();
                 printf("Data saved successfully. Thank you for using Smart Hospital System. Goodbye!\n");
                 return 0;
             default:
-                printf("\n[Error] Invalid choice (%d). Please select an option between 1 and 12.\n", choice);
+                printf("\n[Error] Invalid choice (%d). Please select an option between 1 and 13.\n", choice);
                 break;
         }
     }

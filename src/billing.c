@@ -123,7 +123,7 @@ void processBillCalculation() {
                                   (p->emergencyStatus == 2) ? "25%" : "0%";
 
     printf("\n========================================================================\n");
-    printf("               SMART HOSPITAL ADMISSION & BILL STATEMENT (V4)           \n");
+    printf("               SMART HOSPITAL ADMISSION & BILL STATEMENT                \n");
     printf("========================================================================\n");
     printf(" Patient ID:              %s\n", p->id);
     printf(" Patient Name:            %s\n", p->name);

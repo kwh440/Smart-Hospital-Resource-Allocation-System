@@ -128,7 +128,7 @@ void displayPriorityTriageQueue() {
     sortPatientsByPriority(tempQueue, patientCount);
 
     printf("\n=============================================================================================\n");
-    printf("                       EMERGENCY TRIAGE PRIORITY QUEUE (V2)                                 \n");
+    printf("                       EMERGENCY TRIAGE PRIORITY QUEUE                                      \n");
     printf("=============================================================================================\n");
     printf("%-6s %-10s %-20s %-12s %-5s %-20s %-8s %-6s\n",
            "Rank", "Patient ID", "Name", "Urgency", "Age", "Condition", "Ward ID", "Bed ID");
