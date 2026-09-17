@@ -17,12 +17,13 @@ void displayMenu() {
     printf(" 5. Update Patient Record\n");
     printf(" 6. Display Specialties\n");
     printf(" 7. Display Wards\n");
-    printf(" 8. Display Beds\n");
-    printf(" 9. Allocate Bed\n");
-    printf("10. Calculate Basic Bill\n");
-    printf("11. Exit\n");
+    printf(" 8. Display Beds & Occupancy Metrics\n");
+    printf(" 9. Allocate Bed (With Auto-Recommendation)\n");
+    printf("10. Discharge Patient & Release Bed\n");
+    printf("11. Calculate Basic Bill\n");
+    printf("12. Exit\n");
     printf("=======================================================\n");
-    printf("Enter your choice (1-11): ");
+    printf("Enter your choice (1-12): ");
 }
 
 int main() {
@@ -39,7 +40,7 @@ int main() {
         displayMenu();
 
         if (scanf("%d", &choice) != 1) {
-            printf("\n[Validation Error] Invalid input! Please enter a number between 1 and 11.\n");
+            printf("\n[Validation Error] Invalid input! Please enter a number between 1 and 12.\n");
             int c;
             while ((c = getchar()) != '\n' && c != EOF);
             continue;
@@ -68,22 +69,25 @@ int main() {
                 displayWards();
                 break;
             case 8:
-                displayBeds();
+                displayBedOccupancyMetrics();
                 break;
             case 9:
                 allocateBed();
                 break;
             case 10:
-                processBillCalculation();
+                releaseBed();
                 break;
             case 11:
+                processBillCalculation();
+                break;
+            case 12:
                 printf("\nSaving data records to disk before exiting...\n");
                 savePatientRecords();
                 saveBedStatus();
-                printf("Data saved successfully. Thank you for using Smart Hospital System (V2). Goodbye!\n");
+                printf("Data saved successfully. Thank you for using Smart Hospital System. Goodbye!\n");
                 return 0;
             default:
-                printf("\n[Error] Invalid choice (%d). Please select an option between 1 and 11.\n", choice);
+                printf("\n[Error] Invalid choice (%d). Please select an option between 1 and 12.\n", choice);
                 break;
         }
     }

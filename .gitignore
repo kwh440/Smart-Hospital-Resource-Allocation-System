@@ -4,6 +4,11 @@
 *.o
 *.obj
 
+# Code::Blocks build dependencies & UI layout state
+*.depend
+*.layout
+bin/
+obj/
 
 # Temporary and log files
 *.log

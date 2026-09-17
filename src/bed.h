@@ -17,4 +17,8 @@ void displayBeds();
 int findAvailableBed(int wardID);
 void allocateBed();
 
+int recommendWard(int emergencyStatus, int age);
+void releaseBed();
+void displayBedOccupancyMetrics();
+
 #endif
