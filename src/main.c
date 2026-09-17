@@ -8,18 +8,21 @@
 
 void displayMenu() {
     printf("\n=======================================================\n");
-    printf("   SMART HOSPITAL & RESOURCE ALLOCATION SYSTEM (V1)    \n");
+    printf("     SMART HOSPITAL & RESOURCE ALLOCATION SYSTEM     \n");
     printf("=======================================================\n");
     printf(" 1. Register Patient\n");
-    printf(" 2. Display Patients\n");
-    printf(" 3. Display Specialties\n");
-    printf(" 4. Display Wards\n");
-    printf(" 5. Display Beds\n");
-    printf(" 6. Allocate Bed\n");
-    printf(" 7. Calculate Basic Bill\n");
-    printf(" 8. Exit\n");
+    printf(" 2. Display Patients (Registration Order)\n");
+    printf(" 3. Display Priority Triage Queue (Emergency Priority)\n");
+    printf(" 4. Search Patient Record\n");
+    printf(" 5. Update Patient Record\n");
+    printf(" 6. Display Specialties\n");
+    printf(" 7. Display Wards\n");
+    printf(" 8. Display Beds\n");
+    printf(" 9. Allocate Bed\n");
+    printf("10. Calculate Basic Bill\n");
+    printf("11. Exit\n");
     printf("=======================================================\n");
-    printf("Enter your choice (1-8): ");
+    printf("Enter your choice (1-11): ");
 }
 
 int main() {
@@ -34,9 +37,9 @@ int main() {
 
     while (1) {
         displayMenu();
-        
+
         if (scanf("%d", &choice) != 1) {
-            printf("\n[Validation Error] Invalid input! Please enter a number between 1 and 8.\n");
+            printf("\n[Validation Error] Invalid input! Please enter a number between 1 and 11.\n");
             int c;
             while ((c = getchar()) != '\n' && c != EOF);
             continue;
@@ -50,28 +53,37 @@ int main() {
                 displayPatients();
                 break;
             case 3:
-                displaySpecialties();
+                displayPriorityTriageQueue();
                 break;
             case 4:
-                displayWards();
+                searchPatient();
                 break;
             case 5:
-                displayBeds();
+                updatePatientRecord();
                 break;
             case 6:
-                allocateBed();
+                displaySpecialties();
                 break;
             case 7:
-                processBillCalculation();
+                displayWards();
                 break;
             case 8:
+                displayBeds();
+                break;
+            case 9:
+                allocateBed();
+                break;
+            case 10:
+                processBillCalculation();
+                break;
+            case 11:
                 printf("\nSaving data records to disk before exiting...\n");
                 savePatientRecords();
                 saveBedStatus();
-                printf("Data saved successfully. Thank you for using Smart Hospital System. Goodbye!\n");
+                printf("Data saved successfully. Thank you for using Smart Hospital System (V2). Goodbye!\n");
                 return 0;
             default:
-                printf("\n[Error] Invalid choice (%d). Please select an option between 1 and 8.\n", choice);
+                printf("\n[Error] Invalid choice (%d). Please select an option between 1 and 11.\n", choice);
                 break;
         }
     }
