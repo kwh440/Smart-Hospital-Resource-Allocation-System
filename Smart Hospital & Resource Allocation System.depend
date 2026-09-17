@@ -1,24 +1,26 @@
 # depslib dependency file v1.0
-1789620162 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
+1789637265 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
 	<stdio.h>
 	<string.h>
 	"bed.h"
 	"ward.h"
 	"patient.h"
 
-1789620156 c:\users\rupik\onedrive\desktop\medical\src\bed.h
+1789637265 c:\users\rupik\onedrive\desktop\medical\src\bed.h
 
 1789591333 c:\users\rupik\onedrive\desktop\medical\src\ward.h
 
-1789604500 c:\users\rupik\onedrive\desktop\medical\src\patient.h
+1789647343 c:\users\rupik\onedrive\desktop\medical\src\patient.h
 
-1789591360 source:c:\users\rupik\onedrive\desktop\medical\src\billing.c
+1789647071 source:c:\users\rupik\onedrive\desktop\medical\src\billing.c
 	<stdio.h>
+	<string.h>
 	"billing.h"
 	"patient.h"
 	"ward.h"
+	"bed.h"
 
-1789591356 c:\users\rupik\onedrive\desktop\medical\src\billing.h
+1789637265 c:\users\rupik\onedrive\desktop\medical\src\billing.h
 
 1789591367 source:c:\users\rupik\onedrive\desktop\medical\src\file_manager.c
 	<stdio.h>
@@ -36,18 +38,30 @@
 	<string.h>
 	"ward.h"
 
-1789604808 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
+1789647430 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
 	<stdio.h>
 	<stdlib.h>
 	"patient.h"
 	"ward.h"
 	"bed.h"
 	"billing.h"
+	"reports.h"
 	"file_manager.h"
 
-1789604507 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
+1789647390 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
 	<stdio.h>
 	<string.h>
 	<ctype.h>
 	"patient.h"
+
+1789647071 c:\users\rupik\onedrive\desktop\medical\src\reports.h
+
+1789647071 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
+	<stdio.h>
+	<string.h>
+	"reports.h"
+	"patient.h"
+	"ward.h"
+	"bed.h"
+	"billing.h"
 

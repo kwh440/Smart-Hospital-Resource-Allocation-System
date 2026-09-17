@@ -6,6 +6,46 @@
 Patient patients[MAX_PATIENTS];
 int patientCount = 0;
 
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+int readIntBounded(const char *prompt, int minVal, int maxVal) {
+    int val;
+    while (1) {
+        printf("%s", prompt);
+        if (scanf("%d", &val) == 1 && val >= minVal && val <= maxVal) {
+            clearInputBuffer();
+            return val;
+        }
+        printf("[Validation Error] Please enter a valid number between %d and %d.\n", minVal, maxVal);
+        clearInputBuffer();
+    }
+}
+
+void readStringNonEmpty(const char *prompt, char *buffer, int maxLen) {
+    while (1) {
+        printf("%s", prompt);
+        if (fgets(buffer, maxLen, stdin) != NULL) {
+            buffer[strcspn(buffer, "\n")] = '\0';
+            if (strlen(buffer) > 0) {
+                return;
+            }
+        }
+        printf("[Validation Error] Input cannot be empty. Please try again.\n");
+    }
+}
+
+int isDuplicatePatient(const char *name, const char *contact) {
+    for (int i = 0; i < patientCount; i++) {
+        if (strcasecmp(patients[i].name, name) == 0 && strcmp(patients[i].contact, contact) == 0) {
+            return 1; // Duplicate match found
+        }
+    }
+    return 0; // Unique
+}
+
 void registerPatient() {
     if (patientCount >= MAX_PATIENTS) {
         printf("\n[Error] Cannot register patient. Hospital system capacity reached (%d patients max).\n", MAX_PATIENTS);
@@ -16,40 +56,24 @@ void registerPatient() {
     sprintf(p.id, "PAT-%04d", patientCount + 1001);
 
     printf("\n--- PATIENT REGISTRATION FORM (%s) ---\n", p.id);
-    
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
 
-    printf("Enter Patient Name: ");
-    if (fgets(p.name, sizeof(p.name), stdin) != NULL) {
-        p.name[strcspn(p.name, "\n")] = '\0';
-    }
+    readStringNonEmpty("Enter Patient Name: ", p.name, sizeof(p.name));
 
-    printf("Enter Age (1 to 120 years): ");
-    if (scanf("%d", &p.age) != 1 || p.age < 1 || p.age > 120) {
-        printf("[Validation Error] Invalid age entered. Registration cancelled for security.\n");
-        while ((c = getchar()) != '\n' && c != EOF);
+    readStringNonEmpty("Enter Contact Number: ", p.contact, sizeof(p.contact));
+
+    if (isDuplicatePatient(p.name, p.contact)) {
+        printf("\n[Duplicate Notice] A patient named '%s' with contact '%s' is already registered in the system.\n", p.name, p.contact);
+        printf("Registration cancelled to prevent duplicate record entry.\n");
         return;
     }
 
-    printf("Enter Gender (Male/Female/Other): ");
-    scanf("%9s", p.gender);
+    p.age = readIntBounded("Enter Age (1 to 120 years): ", 1, 120);
 
-    printf("Enter Contact Number: ");
-    scanf("%19s", p.contact);
+    readStringNonEmpty("Enter Gender (Male/Female/Other): ", p.gender, sizeof(p.gender));
 
-    while ((c = getchar()) != '\n' && c != EOF);
+    readStringNonEmpty("Enter Medical Condition / Visit Reason: ", p.condition, sizeof(p.condition));
 
-    printf("Enter Medical Condition / Visit Reason: ");
-    if (fgets(p.condition, sizeof(p.condition), stdin) != NULL) {
-        p.condition[strcspn(p.condition, "\n")] = '\0';
-    }
-
-    printf("Enter Emergency Status (1 = Normal OPD, 2 = Urgent, 3 = Critical Emergency): ");
-    if (scanf("%d", &p.emergencyStatus) != 1 || p.emergencyStatus < 1 || p.emergencyStatus > 3) {
-        printf("[Note] Unrecognized status entered. Defaulting to Level 1 (Normal OPD).\n");
-        p.emergencyStatus = 1;
-    }
+    p.emergencyStatus = readIntBounded("Enter Emergency Status (1 = Normal OPD, 2 = Urgent, 3 = Critical Emergency): ", 1, 3);
 
     p.wardID = 0;
     p.bedID = 0;
@@ -157,26 +181,14 @@ void searchPatient() {
         return;
     }
 
-    int mode = 0;
     printf("\n--- SEARCH PATIENT RECORDS ---\n");
     printf("1. Search by Patient ID (e.g. PAT-1001)\n");
     printf("2. Search by Patient Name (Partial/Full Match)\n");
-    printf("Select Option (1-2): ");
-    
-    if (scanf("%d", &mode) != 1 || (mode != 1 && mode != 2)) {
-        printf("[Error] Invalid search option selected.\n");
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);
-        return;
-    }
-
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+    int mode = readIntBounded("Select Option (1-2): ", 1, 2);
 
     if (mode == 1) {
         char searchID[15];
-        printf("Enter Patient ID to search: ");
-        scanf("%14s", searchID);
+        readStringNonEmpty("Enter Patient ID to search: ", searchID, sizeof(searchID));
 
         Patient *p = findPatientByID(searchID);
         if (p == NULL) {
@@ -195,15 +207,7 @@ void searchPatient() {
         }
     } else {
         char searchName[50];
-        printf("Enter Patient Name (or partial name): ");
-        if (fgets(searchName, sizeof(searchName), stdin) != NULL) {
-            searchName[strcspn(searchName, "\n")] = '\0';
-        }
-
-        if (strlen(searchName) == 0) {
-            printf("[Error] Search name cannot be empty.\n");
-            return;
-        }
+        readStringNonEmpty("Enter Patient Name (or partial name): ", searchName, sizeof(searchName));
 
         int foundCount = 0;
         printf("\n=== SEARCH RESULTS FOR '%s' ===\n", searchName);
@@ -238,8 +242,7 @@ void updatePatientRecord() {
     }
 
     char targetID[15];
-    printf("\nEnter Patient ID to update (e.g. PAT-1001): ");
-    scanf("%14s", targetID);
+    readStringNonEmpty("\nEnter Patient ID to update (e.g. PAT-1001): ", targetID, sizeof(targetID));
 
     Patient *p = findPatientByID(targetID);
     if (p == NULL) {
@@ -255,9 +258,6 @@ void updatePatientRecord() {
     printf("5. Emergency Status : %d (%s)\n", p->emergencyStatus, (p->emergencyStatus == 3) ? "Critical" : (p->emergencyStatus == 2) ? "Urgent" : "Normal");
     printf("---------------------------------------\n");
 
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-
     char inputBuf[100];
 
     printf("Enter New Name (or press Enter to keep '%s'): ", p->name);
@@ -268,12 +268,7 @@ void updatePatientRecord() {
         }
     }
 
-    printf("Enter New Age (1-120, or enter 0 to keep %d): ", p->age);
-    int newAge;
-    if (scanf("%d", &newAge) == 1 && newAge >= 1 && newAge <= 120) {
-        p->age = newAge;
-    }
-    while ((c = getchar()) != '\n' && c != EOF);
+    p->age = readIntBounded("Enter New Age (1-120): ", 1, 120);
 
     printf("Enter New Contact Number (or press Enter to keep '%s'): ", p->contact);
     if (fgets(inputBuf, sizeof(inputBuf), stdin) != NULL) {
@@ -291,12 +286,7 @@ void updatePatientRecord() {
         }
     }
 
-    printf("Enter New Emergency Status (1 = Normal, 2 = Urgent, 3 = Critical, or 0 to keep %d): ", p->emergencyStatus);
-    int newStatus;
-    if (scanf("%d", &newStatus) == 1 && newStatus >= 1 && newStatus <= 3) {
-        p->emergencyStatus = newStatus;
-    }
-    while ((c = getchar()) != '\n' && c != EOF);
+    p->emergencyStatus = readIntBounded("Enter New Emergency Status (1 = Normal, 2 = Urgent, 3 = Critical): ", 1, 3);
 
     printf("\n[Success] Patient record for '%s' updated successfully!\n", p->id);
 }

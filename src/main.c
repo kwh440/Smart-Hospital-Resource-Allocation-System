@@ -25,7 +25,6 @@ void displayMenu() {
     printf("12. Calculate Basic Bill\n");
     printf("13. Exit\n");
     printf("=======================================================\n");
-    printf("Enter your choice (1-13): ");
 }
 
 int main() {
@@ -36,17 +35,10 @@ int main() {
     loadBedStatus();
     loadPatientRecords();
 
-    int choice = 0;
-
     while (1) {
         displayMenu();
         
-        if (scanf("%d", &choice) != 1) {
-            printf("\n[Validation Error] Invalid input! Please enter a number between 1 and 13.\n");
-            int c;
-            while ((c = getchar()) != '\n' && c != EOF);
-            continue;
-        }
+        int choice = readIntBounded("Enter your choice (1-13): ", 1, 13);
 
         switch (choice) {
             case 1:
@@ -92,7 +84,6 @@ int main() {
                 printf("Data saved successfully. Thank you for using Smart Hospital System. Goodbye!\n");
                 return 0;
             default:
-                printf("\n[Error] Invalid choice (%d). Please select an option between 1 and 13.\n", choice);
                 break;
         }
     }
