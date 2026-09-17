@@ -34,6 +34,11 @@
 			<Add option="-Wall" />
 			<Add directory="src" />
 		</Compiler>
+		<Unit filename="PROJECT DATA/AGENTS.md" />
+		<Unit filename="PROJECT DATA/ARCHITECTURE.md" />
+		<Unit filename="PROJECT DATA/DECISIONS.md" />
+		<Unit filename="PROJECT DATA/PROJECT_MAP.md" />
+		<Unit filename="PROJECT DATA/README.md" />
 		<Unit filename="src/bed.c">
 			<Option compilerVar="CC" />
 		</Unit>

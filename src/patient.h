@@ -23,4 +23,9 @@ void displayPatients();
 Patient* findPatientByID(const char* patientID);
 int getPatientCount();
 
+void sortPatientsByPriority(Patient tempArray[], int count);
+void displayPriorityTriageQueue();
+void searchPatient();
+void updatePatientRecord();
+
 #endif
