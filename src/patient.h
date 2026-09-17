@@ -21,6 +21,7 @@ extern int patientCount;
 void clearInputBuffer();
 int readIntBounded(const char *prompt, int minVal, int maxVal);
 void readStringNonEmpty(const char *prompt, char *buffer, int maxLen);
+void readGender(char *buffer, int maxLen);
 int isDuplicatePatient(const char *name, const char *contact);
 
 void registerPatient();

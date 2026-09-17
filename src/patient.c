@@ -37,13 +37,23 @@ void readStringNonEmpty(const char *prompt, char *buffer, int maxLen) {
     }
 }
 
+void readGender(char *buffer, int maxLen) {
+    int choice = readIntBounded("Select Gender (1 = Male, 2 = Female): ", 1, 2);
+    if (choice == 1) {
+        strncpy(buffer, "Male", maxLen - 1);
+    } else {
+        strncpy(buffer, "Female", maxLen - 1);
+    }
+    buffer[maxLen - 1] = '\0';
+}
+
 int isDuplicatePatient(const char *name, const char *contact) {
     for (int i = 0; i < patientCount; i++) {
         if (strcasecmp(patients[i].name, name) == 0 && strcmp(patients[i].contact, contact) == 0) {
-            return 1; // Duplicate match found
+            return 1;
         }
     }
-    return 0; // Unique
+    return 0;
 }
 
 void registerPatient() {
@@ -69,7 +79,7 @@ void registerPatient() {
 
     p.age = readIntBounded("Enter Age (1 to 120 years): ", 1, 120);
 
-    readStringNonEmpty("Enter Gender (Male/Female/Other): ", p.gender, sizeof(p.gender));
+    readGender(p.gender, sizeof(p.gender));
 
     readStringNonEmpty("Enter Medical Condition / Visit Reason: ", p.condition, sizeof(p.condition));
 
@@ -253,9 +263,10 @@ void updatePatientRecord() {
     printf("\n--- CURRENT PATIENT RECORD FOR %s ---\n", p->id);
     printf("1. Name             : %s\n", p->name);
     printf("2. Age              : %d\n", p->age);
-    printf("3. Contact Number   : %s\n", p->contact);
-    printf("4. Condition        : %s\n", p->condition);
-    printf("5. Emergency Status : %d (%s)\n", p->emergencyStatus, (p->emergencyStatus == 3) ? "Critical" : (p->emergencyStatus == 2) ? "Urgent" : "Normal");
+    printf("3. Gender           : %s\n", p->gender);
+    printf("4. Contact Number   : %s\n", p->contact);
+    printf("5. Condition        : %s\n", p->condition);
+    printf("6. Emergency Status : %d (%s)\n", p->emergencyStatus, (p->emergencyStatus == 3) ? "Critical" : (p->emergencyStatus == 2) ? "Urgent" : "Normal");
     printf("---------------------------------------\n");
 
     char inputBuf[100];
@@ -269,6 +280,13 @@ void updatePatientRecord() {
     }
 
     p->age = readIntBounded("Enter New Age (1-120): ", 1, 120);
+
+    printf("Select New Gender (1 = Male, 2 = Female, or 0 to keep '%s'): ", p->gender);
+    int gChoice;
+    if (scanf("%d", &gChoice) == 1 && (gChoice == 1 || gChoice == 2)) {
+        strcpy(p->gender, (gChoice == 1) ? "Male" : "Female");
+    }
+    clearInputBuffer();
 
     printf("Enter New Contact Number (or press Enter to keep '%s'): ", p->contact);
     if (fgets(inputBuf, sizeof(inputBuf), stdin) != NULL) {
