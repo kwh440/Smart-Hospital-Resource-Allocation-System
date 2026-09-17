@@ -1,12 +1,12 @@
 # depslib dependency file v1.0
-1789637265 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
+1789658297 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
 	<stdio.h>
 	<string.h>
 	"bed.h"
 	"ward.h"
 	"patient.h"
 
-1789637265 c:\users\rupik\onedrive\desktop\medical\src\bed.h
+1789654748 c:\users\rupik\onedrive\desktop\medical\src\bed.h
 
 1789591333 c:\users\rupik\onedrive\desktop\medical\src\ward.h
 

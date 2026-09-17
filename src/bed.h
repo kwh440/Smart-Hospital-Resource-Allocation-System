@@ -14,6 +14,7 @@ extern Bed beds[TOTAL_BEDS_IN_HOSPITAL];
 
 void initBeds();
 void displayBeds();
+void displayBedMatrix();
 int findAvailableBed(int wardID);
 void allocateBed();
 

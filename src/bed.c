@@ -42,9 +42,38 @@ void initBeds() {
     }
 }
 
+void displayBedMatrix() {
+    printf("\n                      BED OCCUPANCY MATRIX (0 = Available, 1 = Occupied)\n\n");
+    printf("                 Bed\n");
+    printf("        01  02  03  04  05  06  07  08  09  10  11  12  13  14  15  16  17  18  19  20\n");
+    printf("       +------------------------------------------------------------------------------\n");
+
+    for (int w = 1; w <= 4; w++) {
+        printf("Ward %d |", w);
+        int wardMaxBeds = (w == 1) ? 20 : (w == 2 || w == 3) ? 10 : 5;
+        
+        for (int b = 1; b <= wardMaxBeds; b++) {
+            int bedID = (w * 100) + b;
+            int status = 0;
+            
+            for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
+                if (beds[i].bedID == bedID) {
+                    status = beds[i].status;
+                    break;
+                }
+            }
+            printf(" %d  ", status);
+        }
+        printf("\n");
+    }
+    printf("--------------------------------------------------------------------------------------\n");
+}
+
 void displayBeds() {
+    displayBedMatrix();
+
     printf("\n===================================================\n");
-    printf("              HOSPITAL BED OCCUPANCY STATUS        \n");
+    printf("              HOSPITAL BED OCCUPANCY LIST          \n");
     printf("===================================================\n");
     printf("%-8s %-8s %-12s %-18s\n", "Bed ID", "Ward ID", "Status", "Assigned Patient");
     printf("---------------------------------------------------\n");
