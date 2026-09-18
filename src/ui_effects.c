@@ -53,3 +53,33 @@ void pauseConsole() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
+
+void showProgressBar(const char *label, int totalSteps, int stepDelayMs) {
+    if (totalSteps <= 0) totalSteps = 20;
+    if (stepDelayMs <= 0) stepDelayMs = 15;
+
+    printf("\n%s [", label);
+    fflush(stdout);
+    for (int i = 1; i <= totalSteps; i++) {
+        printf("=");
+        fflush(stdout);
+        milliSleep(stepDelayMs);
+    }
+    printf("] 100%%\n");
+}
+
+void showLoadingSpinner(const char *label, int durationMs) {
+    static const char spinnerChars[] = "|/-\\";
+    int frameDelay = 50;
+    int totalFrames = durationMs / frameDelay;
+    if (totalFrames <= 0) totalFrames = 8;
+
+    printf("\n");
+    for (int i = 0; i < totalFrames; i++) {
+        printf("\r%-50s [%c]", label, spinnerChars[i % 4]);
+        fflush(stdout);
+        milliSleep(frameDelay);
+    }
+    printf("\r%-50s [OK]\n", label);
+    fflush(stdout);
+}

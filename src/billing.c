@@ -4,6 +4,7 @@
 #include "patient.h"
 #include "ward.h"
 #include "bed.h"
+#include "ui_effects.h"
 
 float calculateWardCost(float dailyRate, int days) {
     if (days <= 0) {
@@ -121,6 +122,8 @@ void processBillCalculation() {
                              (p->emergencyStatus == 2) ? "Level 2 (Urgent)" : "Level 1 (Normal)";
     const char *surchargePctStr = (p->emergencyStatus == 3) ? "50%" :
                                   (p->emergencyStatus == 2) ? "25%" : "0%";
+
+    showLoadingSpinner("Calculating billing breakdown & subsidies...", 400);
 
     printf("\n========================================================================\n");
     printf("               SMART HOSPITAL ADMISSION & BILL STATEMENT                \n");

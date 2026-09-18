@@ -2,6 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "patient.h"
+#include "ui_effects.h"
 
 Patient patients[MAX_PATIENTS];
 int patientCount = 0;
@@ -90,6 +91,7 @@ void registerPatient() {
 
     patients[patientCount++] = p;
     
+    showLoadingSpinner("Processing Patient Registration...", 400);
     printf("\n[Success] Patient '%s' registered successfully with assigned ID: %s!\n", p.name, p.id);
 }
 

@@ -5,6 +5,7 @@
 #include "patient.h"
 #include "bed.h"
 #include "ward.h"
+#include "ui_effects.h"
 
 #define PATIENT_FILE "data/patients.txt"
 #define BED_FILE "data/beds.txt"
@@ -45,6 +46,7 @@ void savePatientRecords() {
     }
 
     fclose(fp);
+    showProgressBar("[File Storage] Saving patient records...", 20, 15);
     printf("[File Storage] Saved %d patient record(s) to '%s'.\n", patientCount, PATIENT_FILE);
 }
 
@@ -99,6 +101,7 @@ void loadPatientRecords() {
     }
 
     fclose(fp);
+    showProgressBar("[File Storage] Loading patient records...", 20, 15);
     printf("[File Storage] Successfully loaded %d patient record(s) from '%s'.\n", patientCount, PATIENT_FILE);
 }
 
@@ -118,6 +121,7 @@ void saveBedStatus() {
     }
 
     fclose(fp);
+    showProgressBar("[File Storage] Saving bed matrix status...", 20, 15);
     printf("[File Storage] Saved bed matrix status to '%s'.\n", BED_FILE);
 }
 
@@ -154,5 +158,6 @@ void loadBedStatus() {
     }
 
     fclose(fp);
+    showProgressBar("[File Storage] Loading bed matrix status...", 20, 15);
     printf("[File Storage] Successfully loaded bed matrix from '%s'.\n", BED_FILE);
 }
