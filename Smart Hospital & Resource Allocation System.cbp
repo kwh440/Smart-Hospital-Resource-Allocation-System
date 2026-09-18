@@ -63,6 +63,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/reports.h" />
+		<Unit filename="src/ui_effects.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/ui_effects.h" />
 		<Unit filename="src/ward.c">
 			<Option compilerVar="CC" />
 		</Unit>
