@@ -14,4 +14,7 @@ void showTriageAlert(int emergencyStatus, const char *patientName);
 void showTriageQueueSortingAnimation();
 void showHospitalStatusDisplay(int totalPatients, int occupiedBeds, int totalBeds);
 
+/* V7.4 Analytics & Bar Charts */
+void drawBarChart(const char *label, int count, int totalCount, int maxBarWidth);
+
 #endif

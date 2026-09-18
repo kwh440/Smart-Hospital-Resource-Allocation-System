@@ -41,7 +41,7 @@
 	<string.h>
 	"ward.h"
 
-1789706833 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
+1789713996 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
 	<stdio.h>
 	<stdlib.h>
 	"patient.h"
@@ -52,7 +52,7 @@
 	"file_manager.h"
 	"ui_effects.h"
 
-1789708099 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
+1789713807 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
 	<stdio.h>
 	<string.h>
 	<ctype.h>
@@ -61,7 +61,7 @@
 
 1789647071 c:\users\rupik\onedrive\desktop\medical\src\reports.h
 
-1789712670 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
+1789715112 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
 	<stdio.h>
 	<string.h>
 	"reports.h"
@@ -71,9 +71,9 @@
 	"billing.h"
 	"ui_effects.h"
 
-1789712280 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
+1789715052 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
 
-1789712321 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
+1789715066 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

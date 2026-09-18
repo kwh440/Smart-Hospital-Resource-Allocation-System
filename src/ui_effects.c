@@ -135,3 +135,20 @@ void showHospitalStatusDisplay(int totalPatients, int occupiedBeds, int totalBed
     printf("| Bed Utilization Rate:  %-33.1f%% |\n", occupancyPct);
     printf("+==========================================================+\n");
 }
+
+void drawBarChart(const char *label, int count, int totalCount, int maxBarWidth) {
+    if (maxBarWidth <= 0) maxBarWidth = 20;
+    float pct = (totalCount > 0) ? ((float)count / (float)totalCount) * 100.0f : 0.0f;
+    int filledBars = (totalCount > 0) ? (int)((float)count / (float)totalCount * maxBarWidth + 0.5f) : 0;
+    if (filledBars > maxBarWidth) filledBars = maxBarWidth;
+
+    printf(" %-22s [", label);
+    for (int i = 0; i < maxBarWidth; i++) {
+        if (i < filledBars) {
+            printf("*");
+        } else {
+            printf(" ");
+        }
+    }
+    printf("] %5.1f%% (%d)\n", pct, count);
+}

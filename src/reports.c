@@ -13,6 +13,8 @@ void generatePerformanceReport() {
         if (beds[i].status == 1) totalOccupiedBeds++;
     }
 
+    showLoadingSpinner("Generating Hospital Performance Analytics Report...", 400);
+
     showHospitalStatusDisplay(patientCount, totalOccupiedBeds, TOTAL_BEDS_IN_HOSPITAL);
 
     printf("\n========================================================================\n");
@@ -44,6 +46,10 @@ void generatePerformanceReport() {
     printf("   - Level 1 (Normal OPD)  : %d (%.1f%%)\n", normalCount, normalPct);
     printf("   - Level 2 (Urgent)      : %d (%.1f%%)\n", urgentCount, urgentPct);
     printf("   - Level 3 (Critical)    : %d (%.1f%%)\n", criticalCount, criticalPct);
+    printf("\n [Triage Distribution Chart]\n");
+    drawBarChart("Normal OPD", normalCount, patientCount, 20);
+    drawBarChart("Urgent Priority", urgentCount, patientCount, 20);
+    drawBarChart("Critical Emergency", criticalCount, patientCount, 20);
 
     // -------------------------------------------------------------------------
     // 2. Financial Analytics & Revenue Summaries
@@ -137,6 +143,19 @@ void generatePerformanceReport() {
     printf("-------------------------------------------------------------------------\n");
     printf("%-8s %-20s %-12d %-12d %-12d %-11.1f%%\n",
            "TOTAL", "All Wards Combined", grandTotal, grandOccupied, grandAvailable, grandPct);
+
+    printf("\n [Ward Occupancy Utilization Chart]\n");
+    for (int w = 1; w <= MAX_WARDS; w++) {
+        Ward *ward = getWardByID(w);
+        if (ward == NULL) continue;
+        int occupiedCount = 0;
+        for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
+            if (beds[i].wardID == w && beds[i].status == 1) {
+                occupiedCount++;
+            }
+        }
+        drawBarChart(ward->name, occupiedCount, ward->totalBeds, 20);
+    }
 
     // -------------------------------------------------------------------------
     // 4. Highest-Paying Patient Summary
