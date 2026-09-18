@@ -3,6 +3,7 @@
 #include "bed.h"
 #include "ward.h"
 #include "patient.h"
+#include "ui_effects.h"
 
 Bed beds[TOTAL_BEDS_IN_HOSPITAL];
 
@@ -197,6 +198,7 @@ void allocateBed() {
         return;
     }
 
+    showBedScanningAnimation(wardID);
     int bedID = findAvailableBed(wardID);
     if (bedID == -1) {
         printf("[Allocation Error] Sorry, all beds in Ward #%d are currently full!\n", wardID);
@@ -215,6 +217,7 @@ void allocateBed() {
                 w->availableBeds--;
             }
 
+            showBedAllocationVisual(bedID, p->id, p->name);
             printf("\n[Success] Bed #%d in Ward #%d successfully allocated to Patient '%s' (%s)!\n",
                    bedID, wardID, p->name, p->id);
             return;
