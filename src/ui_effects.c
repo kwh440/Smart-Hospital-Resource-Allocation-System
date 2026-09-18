@@ -19,6 +19,8 @@ static void milliSleep(int milliseconds) {
 
 void enableVTMode() {
 #ifdef _WIN32
+    SetConsoleOutputCP(65001); // 65001 = CP_UTF8 (Fixes garbled unicode box characters in Windows CMD)
+    SetConsoleCP(65001);
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hOut != INVALID_HANDLE_VALUE) {
         DWORD dwMode = 0;
@@ -32,12 +34,12 @@ void enableVTMode() {
 
 void displayStartupScreen() {
     enableVTMode();
-    printf("\n%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s|                                                          |%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s|             SMART HOSPITAL SYSTEM                        |%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s|                                                          |%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s|             Initializing System...                       |%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s|             [%s", COLOR_CYAN, COLOR_GREEN);
+    printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                                                    ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║             SMART HOSPITAL SYSTEM                  ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                                                    ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║             Initializing System...                 ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║             [%s", COLOR_CYAN, COLOR_GREEN);
     fflush(stdout);
 
     int totalBlocks = 25;
@@ -46,19 +48,19 @@ void displayStartupScreen() {
         fflush(stdout);
         milliSleep(40);
     }
-    printf("%s] 100%%       %s|\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s|                                                          |%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s|                %sSYSTEM READY [OK]%s%s                         |%s\n", COLOR_CYAN, COLOR_GREEN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
-    printf("%s|                                                          |%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s+==========================================================+%s\n\n", COLOR_CYAN, COLOR_RESET);
-    
+    printf("%s] 100%%       %s║%s\n", COLOR_CYAN, COLOR_CYAN, COLOR_RESET);
+    printf("%s║                                                    ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                %sSYSTEM READY [OK]%s%s                   ║%s\n", COLOR_CYAN, COLOR_GREEN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║                                                    ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s╚════════════════════════════════════════════════════╝%s\n\n", COLOR_CYAN, COLOR_RESET);
+
     milliSleep(400);
 }
 
 void drawBoxHeader(const char *title) {
-    printf("\n%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s| %-56s |%s\n", COLOR_CYAN, title, COLOR_RESET);
-    printf("%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║ %-50s ║%s\n", COLOR_CYAN, title, COLOR_RESET);
+    printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 }
 
 void pauseConsole() {
@@ -110,27 +112,27 @@ void showBedScanningAnimation(int wardID) {
 }
 
 void showBedAllocationVisual(int bedID, const char *patientID, const char *patientName) {
-    printf("\n%s+----------------------------------------------------------+%s\n", COLOR_GREEN, COLOR_RESET);
-    printf("%s|              BED ALLOCATION CONFIRMATION                 |%s\n", COLOR_GREEN, COLOR_RESET);
-    printf("%s+----------------------------------------------------------+%s\n", COLOR_GREEN, COLOR_RESET);
-    printf("|  BED ID ASSIGNED:   %-36d |\n", bedID);
-    printf("|  PATIENT ID:        %-36s |\n", patientID);
-    printf("|  PATIENT NAME:      %-36s |\n", patientName);
-    printf("|  STATUS:            %sRESERVED & OCCUPIED [CONFIRMED]%s      |\n", COLOR_GREEN, COLOR_RESET);
-    printf("%s+----------------------------------------------------------+%s\n", COLOR_GREEN, COLOR_RESET);
+    printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_GREEN, COLOR_RESET);
+    printf("%s║              BED ALLOCATION CONFIRMATION           ║%s\n", COLOR_GREEN, COLOR_RESET);
+    printf("%s╠════════════════════════════════════════════════════╣%s\n", COLOR_GREEN, COLOR_RESET);
+    printf("%s║%s  BED ID ASSIGNED:   %-28d %s║%s\n", COLOR_GREEN, COLOR_RESET, bedID, COLOR_GREEN, COLOR_RESET);
+    printf("%s║%s  PATIENT ID:        %-28s %s║%s\n", COLOR_GREEN, COLOR_RESET, patientID, COLOR_GREEN, COLOR_RESET);
+    printf("%s║%s  PATIENT NAME:      %-28s %s║%s\n", COLOR_GREEN, COLOR_RESET, patientName, COLOR_GREEN, COLOR_RESET);
+    printf("%s║%s  STATUS:            %sRESERVED & OCCUPIED [CONFIRMED]%s %s║%s\n", COLOR_GREEN, COLOR_RESET, COLOR_GREEN, COLOR_RESET, COLOR_GREEN, COLOR_RESET);
+    printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_GREEN, COLOR_RESET);
 }
 
 void showTriageAlert(int emergencyStatus, const char *patientName) {
     if (emergencyStatus == 3) {
-        printf("\n%s+==========================================================+%s\n", COLOR_RED, COLOR_RESET);
-        printf("%s| [!!!] CRITICAL EMERGENCY ALERT (LEVEL 3) [!!!]           |%s\n", COLOR_RED, COLOR_RESET);
-        printf("%s| Patient '%-28s' requires IMMEDIATE CARE |%s \n", COLOR_RED, patientName, COLOR_RESET);
-        printf("%s+==========================================================+%s\n", COLOR_RED, COLOR_RESET);
+        printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_RED, COLOR_RESET);
+        printf("%s║ [!!!] CRITICAL EMERGENCY ALERT (LEVEL 3) [!!!]     ║%s\n", COLOR_RED, COLOR_RESET);
+        printf("%s║ Patient '%-26s' requires IMMEDIATE CARE ║%s\n", COLOR_RED, patientName, COLOR_RESET);
+        printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_RED, COLOR_RESET);
     } else if (emergencyStatus == 2) {
-        printf("\n%s+----------------------------------------------------------+%s\n", COLOR_YELLOW, COLOR_RESET);
-        printf("%s| [!] URGENT TRIAGE NOTICE (LEVEL 2)                       |%s\n", COLOR_YELLOW, COLOR_RESET);
-        printf("%s| Patient '%-28s' assigned HIGH PRIORITY  |%s\n", COLOR_YELLOW, patientName, COLOR_RESET);
-        printf("%s+----------------------------------------------------------+%s\n", COLOR_YELLOW, COLOR_RESET);
+        printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_YELLOW, COLOR_RESET);
+        printf("%s║ [!] URGENT TRIAGE NOTICE (LEVEL 2)                 ║%s\n", COLOR_YELLOW, COLOR_RESET);
+        printf("%s║ Patient '%-26s' assigned HIGH PRIORITY ║%s\n", COLOR_YELLOW, patientName, COLOR_RESET);
+        printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_YELLOW, COLOR_RESET);
     }
     milliSleep(300);
 }
@@ -141,13 +143,20 @@ void showTriageQueueSortingAnimation() {
 
 void showHospitalStatusDisplay(int totalPatients, int occupiedBeds, int totalBeds) {
     float occupancyPct = (totalBeds > 0) ? ((float)occupiedBeds / (float)totalBeds) * 100.0f : 0.0f;
-    printf("\n%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s|              HOSPITAL REAL-TIME STATUS                   |%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("| Total Active Patients: %-33d |\n", totalPatients);
-    printf("| Bed Occupancy Count:   %d / %-28d |\n", occupiedBeds, totalBeds);
-    printf("| Bed Utilization Rate:  %s%-33.1f%%%s |\n", (occupancyPct > 80.0f ? COLOR_RED : occupancyPct > 50.0f ? COLOR_YELLOW : COLOR_GREEN), occupancyPct, COLOR_RESET);
-    printf("%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
+    const char *pctColor = (occupancyPct > 80.0f ? COLOR_RED : occupancyPct > 50.0f ? COLOR_YELLOW : COLOR_GREEN);
+
+    char line1[60], line2[60], line3[60];
+    snprintf(line1, sizeof(line1), "Total Active Patients: %d", totalPatients);
+    snprintf(line2, sizeof(line2), "Bed Occupancy Count:   %d / %d", occupiedBeds, totalBeds);
+    snprintf(line3, sizeof(line3), "Bed Utilization Rate:  %.1f %%", occupancyPct);
+
+    printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║              HOSPITAL REAL-TIME STATUS             ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s╠════════════════════════════════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  %-48s  %s║%s\n", COLOR_CYAN, COLOR_RESET, line1, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  %-48s  %s║%s\n", COLOR_CYAN, COLOR_RESET, line2, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  %s%-48s%s  %s║%s\n", COLOR_CYAN, COLOR_RESET, pctColor, line3, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 }
 
 void drawBarChart(const char *label, int count, int totalCount, int maxBarWidth) {

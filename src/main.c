@@ -9,26 +9,27 @@
 #include "ui_effects.h"
 
 void displayMenu() {
-    printf("%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s|                MAIN MENU - SMART HOSPITAL                |%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("|  1. Register Patient                                     |\n");
-    printf("|  2. Display Patients (Registration Order)                |\n");
-    printf("|  3. Display Priority Triage Queue (Emergency Priority)   |\n");
-    printf("|  4. Search Patient Record                                |\n");
-    printf("|  5. Update Patient Record                                |\n");
-    printf("|  6. Display Specialties                                  |\n");
-    printf("|  7. Display Wards                                        |\n");
-    printf("|  8. Display Beds & Occupancy Metrics                     |\n");
-    printf("|  9. Allocate Bed (With Auto-Recommendation)             |\n");
-    printf("| 10. Discharge Patient & Release Bed                      |\n");
-    printf("| 11. Generate Performance Reports & Analytics             |\n");
-    printf("| 12. Calculate Basic Bill                                 |\n");
-    printf("| 13. Exit                                                 |\n");
-    printf("%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s╔════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                MAIN MENU - SMART HOSPITAL          ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s╠════════════════════════════════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  1. Register Patient                               %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  2. Display Patients (Registration Order)          %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  3. Display Priority Triage Queue                  %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  4. Search Patient Record                          %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  5. Update Patient Record                          %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  6. Display Specialties                            %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  7. Display Wards                                  %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  8. Display Beds & Occupancy Metrics               %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  9. Allocate Bed (With Auto-Recommendation)        %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s 10. Discharge Patient & Release Bed                %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s 11. Generate Performance Reports & Analytics       %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s 12. Calculate Basic Bill                           %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s 13. Exit                                           %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 }
 
 int main() {
+    enableVTMode();
     displayStartupScreen();
 
     initDirectoriesAndFiles();

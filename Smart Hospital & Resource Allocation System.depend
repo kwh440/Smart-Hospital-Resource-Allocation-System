@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1789712529 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
+1789753826 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
 	<stdio.h>
 	<string.h>
 	"bed.h"
@@ -7,13 +7,13 @@
 	"patient.h"
 	"ui_effects.h"
 
-1789730750 c:\users\rupik\onedrive\desktop\medical\src\bed.h
+1789750262 c:\users\rupik\onedrive\desktop\medical\src\bed.h
 
 1789591333 c:\users\rupik\onedrive\desktop\medical\src\ward.h
 
 1789684082 c:\users\rupik\onedrive\desktop\medical\src\patient.h
 
-1789708192 source:c:\users\rupik\onedrive\desktop\medical\src\billing.c
+1789750262 source:c:\users\rupik\onedrive\desktop\medical\src\billing.c
 	<stdio.h>
 	<string.h>
 	"billing.h"
@@ -24,7 +24,7 @@
 
 1789637265 c:\users\rupik\onedrive\desktop\medical\src\billing.h
 
-1789708323 source:c:\users\rupik\onedrive\desktop\medical\src\file_manager.c
+1789750262 source:c:\users\rupik\onedrive\desktop\medical\src\file_manager.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -41,7 +41,7 @@
 	<string.h>
 	"ward.h"
 
-1789713996 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
+1789754037 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
 	<stdio.h>
 	<stdlib.h>
 	"patient.h"
@@ -52,7 +52,7 @@
 	"file_manager.h"
 	"ui_effects.h"
 
-1789713807 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
+1789753007 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
 	<stdio.h>
 	<string.h>
 	<ctype.h>
@@ -61,7 +61,7 @@
 
 1789647071 c:\users\rupik\onedrive\desktop\medical\src\reports.h
 
-1789715112 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
+1789750262 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
 	<stdio.h>
 	<string.h>
 	"reports.h"
@@ -71,9 +71,9 @@
 	"billing.h"
 	"ui_effects.h"
 
-1789730399 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
+1789750262 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
 
-1789715066 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
+1789754269 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

@@ -87,10 +87,10 @@ void displayBoxedWardBedStatus() {
         char titleStr[60];
         snprintf(titleStr, sizeof(titleStr), "%s BED STATUS", ward->name);
 
-        printf("\n%s+======================================+%s\n", COLOR_CYAN, COLOR_RESET);
-        printf("%s| %-36s |%s\n", COLOR_CYAN, titleStr, COLOR_RESET);
-        printf("%s+======================================+%s\n", COLOR_CYAN, COLOR_RESET);
-        printf("%s|                                      |%s\n", COLOR_CYAN, COLOR_RESET);
+        printf("\n%s╔══════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+        printf("%s║%s  %-38s  %s║%s\n", COLOR_CYAN, COLOR_RESET, titleStr, COLOR_CYAN, COLOR_RESET);
+        printf("%s╠══════════════════════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+        printf("%s║                                          ║%s\n", COLOR_CYAN, COLOR_RESET);
 
         for (int b = 1; b <= wardBeds; b++) {
             int bedID = (w * 100) + b;
@@ -103,18 +103,21 @@ void displayBoxedWardBedStatus() {
             }
             if (status == 1) {
                 occupied++;
-                printf("%s|%s  Bed %02d  [%s OCCUPIED %s]   %sRED%s        %s|%s\n",
+                printf("%s║%s  Bed %02d  [%s OCCUPIED %s]   %sRED%s               %s║%s\n",
                        COLOR_CYAN, COLOR_RESET, b, COLOR_RED, COLOR_RESET, COLOR_RED, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
             } else {
-                printf("%s|%s  Bed %02d  [%s AVAILABLE %s]  %sGREEN%s      %s|%s\n",
+                printf("%s║%s  Bed %02d  [%s AVAILABLE %s]  %sGREEN%s            %s║%s\n",
                        COLOR_CYAN, COLOR_RESET, b, COLOR_GREEN, COLOR_RESET, COLOR_GREEN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
             }
         }
 
         float pct = (wardBeds > 0) ? ((float)occupied / (float)wardBeds) * 100.0f : 0.0f;
-        printf("%s|                                      |%s\n", COLOR_CYAN, COLOR_RESET);
-        printf("%s|%s  Occupancy: %-23.1f%% %s|%s\n", COLOR_CYAN, COLOR_RESET, pct, COLOR_CYAN, COLOR_RESET);
-        printf("%s+======================================+%s\n", COLOR_CYAN, COLOR_RESET);
+        char occBuf[50];
+        snprintf(occBuf, sizeof(occBuf), "Occupancy: %.1f %%", pct);
+
+        printf("%s║                                          ║%s\n", COLOR_CYAN, COLOR_RESET);
+        printf("%s║%s  %-38s  %s║%s\n", COLOR_CYAN, COLOR_RESET, occBuf, COLOR_CYAN, COLOR_RESET);
+        printf("%s╚══════════════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
     }
 }
 
