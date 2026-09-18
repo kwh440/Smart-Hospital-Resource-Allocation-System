@@ -85,10 +85,10 @@ void showProgressBar(const char *label, int totalSteps, int stepDelayMs) {
 }
 
 void showLoadingSpinner(const char *label, int durationMs) {
+    if (durationMs < 3000) durationMs = 3000; // Enforce at least 3 seconds duration
     static const char spinnerChars[] = "|/-\\";
-    int frameDelay = 50;
+    int frameDelay = 120; // Smooth, clearly visible rotation pace
     int totalFrames = durationMs / frameDelay;
-    if (totalFrames <= 0) totalFrames = 8;
 
     printf("\n");
     for (int i = 0; i < totalFrames; i++) {
@@ -138,7 +138,7 @@ void showTriageAlert(int emergencyStatus, const char *patientName) {
 }
 
 void showTriageQueueSortingAnimation() {
-    showLoadingSpinner("Sorting Triage Priority Queue (Critical -> Urgent -> Normal)", 350);
+    showLoadingSpinner("Sorting Triage Priority Queue (Critical -> Urgent -> Normal)", 3000);
 }
 
 void showHospitalStatusDisplay(int totalPatients, int occupiedBeds, int totalBeds) {

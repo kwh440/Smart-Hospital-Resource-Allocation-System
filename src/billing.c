@@ -123,7 +123,7 @@ void processBillCalculation() {
     const char *surchargePctStr = (p->emergencyStatus == 3) ? "50%" :
                                   (p->emergencyStatus == 2) ? "25%" : "0%";
 
-    showLoadingSpinner("Calculating billing breakdown & subsidies...", 400);
+    showLoadingSpinner("Calculating billing breakdown & subsidies...", 3000);
 
     printf("\n========================================================================\n");
     printf("               SMART HOSPITAL ADMISSION & BILL STATEMENT                \n");

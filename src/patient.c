@@ -91,7 +91,7 @@ void registerPatient() {
 
     patients[patientCount++] = p;
 
-    showLoadingSpinner("Processing Patient Registration...", 400);
+    showLoadingSpinner("Processing Patient Registration...", 3000);
     showTriageAlert(p.emergencyStatus, p.name);
     printf("\n%s[Success] Patient '%s' registered successfully with assigned ID: %s!%s\n", COLOR_GREEN, p.name, p.id, COLOR_RESET);
 }

@@ -9,6 +9,7 @@
 #include "ui_effects.h"
 
 void displayMenu() {
+    printf("\n");
     printf("%s╔════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s║                MAIN MENU - SMART HOSPITAL          ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s╠════════════════════════════════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);

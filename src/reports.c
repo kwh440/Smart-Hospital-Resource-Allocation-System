@@ -13,7 +13,7 @@ void generatePerformanceReport() {
         if (beds[i].status == 1) totalOccupiedBeds++;
     }
 
-    showLoadingSpinner("Generating Hospital Performance Analytics Report...", 400);
+    showLoadingSpinner("Generating Hospital Performance Analytics Report...", 3000);
 
     showHospitalStatusDisplay(patientCount, totalOccupiedBeds, TOTAL_BEDS_IN_HOSPITAL);
 

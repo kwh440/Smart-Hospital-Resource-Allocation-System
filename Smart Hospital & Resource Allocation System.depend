@@ -41,7 +41,7 @@
 	<string.h>
 	"ward.h"
 
-1789754037 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
+1789755044 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
 	<stdio.h>
 	<stdlib.h>
 	"patient.h"
@@ -73,7 +73,7 @@
 
 1789750262 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
 
-1789754269 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
+1789754404 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
