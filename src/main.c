@@ -40,7 +40,7 @@ int main() {
 
     while (1) {
         displayMenu();
-        
+
         int choice = readIntBounded("Enter your choice (1-13): ", 1, 13);
 
         switch (choice) {
@@ -96,7 +96,7 @@ int main() {
                 printf("\nSaving data records to disk before exiting...\n");
                 savePatientRecords();
                 saveBedStatus();
-                printf("Data saved successfully. Thank you for using Smart Hospital System. Goodbye!\n");
+                printf("Data saved successfully. Thank you for using Smart Hospital System.\n");
                 return 0;
             default:
                 break;

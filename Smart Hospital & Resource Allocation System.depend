@@ -1,10 +1,11 @@
 # depslib dependency file v1.0
-1789658297 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
+1789712529 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
 	<stdio.h>
 	<string.h>
 	"bed.h"
 	"ward.h"
 	"patient.h"
+	"ui_effects.h"
 
 1789654748 c:\users\rupik\onedrive\desktop\medical\src\bed.h
 
@@ -60,7 +61,7 @@
 
 1789647071 c:\users\rupik\onedrive\desktop\medical\src\reports.h
 
-1789647071 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
+1789712670 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
 	<stdio.h>
 	<string.h>
 	"reports.h"
@@ -68,10 +69,11 @@
 	"ward.h"
 	"bed.h"
 	"billing.h"
+	"ui_effects.h"
 
-1789708005 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
+1789712280 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
 
-1789708041 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
+1789712321 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

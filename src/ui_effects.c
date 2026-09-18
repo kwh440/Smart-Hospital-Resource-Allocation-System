@@ -83,3 +83,55 @@ void showLoadingSpinner(const char *label, int durationMs) {
     printf("\r%-50s [OK]\n", label);
     fflush(stdout);
 }
+
+void showBedScanningAnimation(int wardID) {
+    printf("\n[Bed Matrix] Scanning Ward #%d Bed Availability: [ ", wardID);
+    fflush(stdout);
+    for (int b = 1; b <= 5; b++) {
+        printf("Bed-%02d.. ", b);
+        fflush(stdout);
+        milliSleep(60);
+    }
+    printf("] -> AVAILABLE BED FOUND [OK]\n");
+}
+
+void showBedAllocationVisual(int bedID, const char *patientID, const char *patientName) {
+    printf("\n+----------------------------------------------------------+\n");
+    printf("|              BED ALLOCATION CONFIRMATION                 |\n");
+    printf("+----------------------------------------------------------+\n");
+    printf("|  BED ID ASSIGNED:   %-36d |\n", bedID);
+    printf("|  PATIENT ID:        %-36s |\n", patientID);
+    printf("|  PATIENT NAME:      %-36s |\n", patientName);
+    printf("|  STATUS:            RESERVED & OCCUPIED [CONFIRMED]      |\n");
+    printf("+----------------------------------------------------------+\n");
+}
+
+void showTriageAlert(int emergencyStatus, const char *patientName) {
+    if (emergencyStatus == 3) {
+        printf("\n+==========================================================+\n");
+        printf("| [!!!] CRITICAL EMERGENCY ALERT (LEVEL 3) [!!!]           |\n");
+        printf("| Patient '%-28s' requires IMMEDIATE CARE | \n", patientName);
+        printf("+==========================================================+\n");
+    } else if (emergencyStatus == 2) {
+        printf("\n+----------------------------------------------------------+\n");
+        printf("| [!] URGENT TRIAGE NOTICE (LEVEL 2)                       |\n");
+        printf("| Patient '%-28s' assigned HIGH PRIORITY  |\n", patientName);
+        printf("+----------------------------------------------------------+\n");
+    }
+    milliSleep(300);
+}
+
+void showTriageQueueSortingAnimation() {
+    showLoadingSpinner("Sorting Triage Priority Queue (Critical -> Urgent -> Normal)", 350);
+}
+
+void showHospitalStatusDisplay(int totalPatients, int occupiedBeds, int totalBeds) {
+    float occupancyPct = (totalBeds > 0) ? ((float)occupiedBeds / (float)totalBeds) * 100.0f : 0.0f;
+    printf("\n+==========================================================+\n");
+    printf("|              HOSPITAL REAL-TIME STATUS                   |\n");
+    printf("+==========================================================+\n");
+    printf("| Total Active Patients: %-33d |\n", totalPatients);
+    printf("| Bed Occupancy Count:   %d / %-28d |\n", occupiedBeds, totalBeds);
+    printf("| Bed Utilization Rate:  %-33.1f%% |\n", occupancyPct);
+    printf("+==========================================================+\n");
+}

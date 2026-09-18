@@ -5,8 +5,16 @@
 #include "ward.h"
 #include "bed.h"
 #include "billing.h"
+#include "ui_effects.h"
 
 void generatePerformanceReport() {
+    int totalOccupiedBeds = 0;
+    for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
+        if (beds[i].status == 1) totalOccupiedBeds++;
+    }
+
+    showHospitalStatusDisplay(patientCount, totalOccupiedBeds, TOTAL_BEDS_IN_HOSPITAL);
+
     printf("\n========================================================================\n");
     printf("         SMART HOSPITAL SYSTEM - PERFORMANCE & ANALYTICS REPORT         \n");
     printf("========================================================================\n");

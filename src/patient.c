@@ -90,8 +90,9 @@ void registerPatient() {
     p.bedID = 0;
 
     patients[patientCount++] = p;
-    
+
     showLoadingSpinner("Processing Patient Registration...", 400);
+    showTriageAlert(p.emergencyStatus, p.name);
     printf("\n[Success] Patient '%s' registered successfully with assigned ID: %s!\n", p.name, p.id);
 }
 
@@ -107,11 +108,11 @@ void displayPatients() {
     printf("%-10s %-20s %-5s %-8s %-15s %-10s %-8s %-6s\n",
            "Patient ID", "Name", "Age", "Gender", "Contact", "Status", "Ward ID", "Bed ID");
     printf("---------------------------------------------------------------------------------------------\n");
-    
+
     for (int i = 0; i < patientCount; i++) {
         const char *statusStr = (patients[i].emergencyStatus == 3) ? "Critical" :
                                 (patients[i].emergencyStatus == 2) ? "Urgent" : "Normal";
-        
+
         printf("%-10s %-20s %-5d %-8s %-15s %-10s %-8d %-6d\n",
                patients[i].id,
                patients[i].name,
@@ -162,6 +163,7 @@ void displayPriorityTriageQueue() {
     }
 
     sortPatientsByPriority(tempQueue, patientCount);
+    showTriageQueueSortingAnimation();
 
     printf("\n=============================================================================================\n");
     printf("                       EMERGENCY TRIAGE PRIORITY QUEUE                                      \n");
@@ -173,7 +175,7 @@ void displayPriorityTriageQueue() {
     for (int i = 0; i < patientCount; i++) {
         const char *statusStr = (tempQueue[i].emergencyStatus == 3) ? "3 (Critical)" :
                                 (tempQueue[i].emergencyStatus == 2) ? "2 (Urgent)" : "1 (Normal)";
-        
+
         printf("#%-5d %-10s %-20s %-12s %-5d %-20s %-8d %-6d\n",
                i + 1,
                tempQueue[i].id,
@@ -308,5 +310,5 @@ void updatePatientRecord() {
 
     p->emergencyStatus = readIntBounded("Enter New Emergency Status (1 = Normal, 2 = Urgent, 3 = Critical): ", 1, 3);
 
-    printf("\n[Success] Patient record for '%s' updated successfully!\n", p->id);
+    printf("\n[Success] Patient record for '%s' updated successfully.\n", p->id);
 }
