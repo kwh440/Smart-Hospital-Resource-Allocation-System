@@ -22,4 +22,8 @@ int recommendWard(int emergencyStatus, int age);
 void releaseBed();
 void displayBedOccupancyMetrics();
 
+/* Visual Enhancements */
+void displayBoxedWardBedStatus();
+void displayGraphicalBedCards();
+
 #endif

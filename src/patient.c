@@ -93,18 +93,18 @@ void registerPatient() {
 
     showLoadingSpinner("Processing Patient Registration...", 400);
     showTriageAlert(p.emergencyStatus, p.name);
-    printf("\n[Success] Patient '%s' registered successfully with assigned ID: %s!\n", p.name, p.id);
+    printf("\n%s[Success] Patient '%s' registered successfully with assigned ID: %s!%s\n", COLOR_GREEN, p.name, p.id, COLOR_RESET);
 }
 
 void displayPatients() {
     if (patientCount == 0) {
-        printf("\n[Information] No patients are currently registered in the system.\n");
+        printf("\n%s[Information] No patients are currently registered in the system.%s\n", COLOR_CYAN, COLOR_RESET);
         return;
     }
 
-    printf("\n=============================================================================================\n");
-    printf("                                REGISTERED PATIENTS DIRECTORY                                \n");
-    printf("=============================================================================================\n");
+    printf("\n%s=============================================================================================%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s                                REGISTERED PATIENTS DIRECTORY                                %s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s=============================================================================================%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%-10s %-20s %-5s %-8s %-15s %-10s %-8s %-6s\n",
            "Patient ID", "Name", "Age", "Gender", "Contact", "Status", "Ward ID", "Bed ID");
     printf("---------------------------------------------------------------------------------------------\n");
@@ -112,14 +112,16 @@ void displayPatients() {
     for (int i = 0; i < patientCount; i++) {
         const char *statusStr = (patients[i].emergencyStatus == 3) ? "Critical" :
                                 (patients[i].emergencyStatus == 2) ? "Urgent" : "Normal";
+        const char *colorStr = (patients[i].emergencyStatus == 3) ? COLOR_RED :
+                               (patients[i].emergencyStatus == 2) ? COLOR_YELLOW : COLOR_GREEN;
 
-        printf("%-10s %-20s %-5d %-8s %-15s %-10s %-8d %-6d\n",
+        printf("%-10s %-20s %-5d %-8s %-15s %s%-10s%s %-8d %-6d\n",
                patients[i].id,
                patients[i].name,
                patients[i].age,
                patients[i].gender,
                patients[i].contact,
-               statusStr,
+               colorStr, statusStr, COLOR_RESET,
                patients[i].wardID,
                patients[i].bedID);
     }
@@ -164,10 +166,11 @@ void displayPriorityTriageQueue() {
 
     sortPatientsByPriority(tempQueue, patientCount);
     showTriageQueueSortingAnimation();
+    displayColorLegend();
 
-    printf("\n=============================================================================================\n");
-    printf("                       EMERGENCY TRIAGE PRIORITY QUEUE                                      \n");
-    printf("=============================================================================================\n");
+    printf("\n%s=============================================================================================%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s                       EMERGENCY TRIAGE PRIORITY QUEUE                                      %s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s=============================================================================================%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%-6s %-10s %-20s %-12s %-5s %-20s %-8s %-6s\n",
            "Rank", "Patient ID", "Name", "Urgency", "Age", "Condition", "Ward ID", "Bed ID");
     printf("---------------------------------------------------------------------------------------------\n");
@@ -175,12 +178,14 @@ void displayPriorityTriageQueue() {
     for (int i = 0; i < patientCount; i++) {
         const char *statusStr = (tempQueue[i].emergencyStatus == 3) ? "3 (Critical)" :
                                 (tempQueue[i].emergencyStatus == 2) ? "2 (Urgent)" : "1 (Normal)";
+        const char *colorStr = (tempQueue[i].emergencyStatus == 3) ? COLOR_RED :
+                               (tempQueue[i].emergencyStatus == 2) ? COLOR_YELLOW : COLOR_GREEN;
 
-        printf("#%-5d %-10s %-20s %-12s %-5d %-20s %-8d %-6d\n",
+        printf("#%-5d %-10s %-20s %s%-12s%s %-5d %-20s %-8d %-6d\n",
                i + 1,
                tempQueue[i].id,
                tempQueue[i].name,
-               statusStr,
+               colorStr, statusStr, COLOR_RESET,
                tempQueue[i].age,
                tempQueue[i].condition,
                tempQueue[i].wardID,

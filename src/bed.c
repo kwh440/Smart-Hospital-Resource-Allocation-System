@@ -44,7 +44,9 @@ void initBeds() {
 }
 
 void displayBedMatrix() {
-    printf("\n                      BED OCCUPANCY MATRIX (0 = Available, 1 = Occupied)\n\n");
+    displayColorLegend();
+
+    printf("\n%s                      BED OCCUPANCY MATRIX (0 = Available, 1 = Occupied)%s\n\n", COLOR_CYAN, COLOR_RESET);
     printf("                 Bed\n");
     printf("        01  02  03  04  05  06  07  08  09  10  11  12  13  14  15  16  17  18  19  20\n");
     printf("       +------------------------------------------------------------------------------\n");
@@ -63,28 +65,140 @@ void displayBedMatrix() {
                     break;
                 }
             }
-            printf(" %d  ", status);
+            if (status == 1) {
+                printf(" %s1%s  ", COLOR_RED, COLOR_RESET);
+            } else {
+                printf(" %s0%s  ", COLOR_GREEN, COLOR_RESET);
+            }
         }
         printf("\n");
     }
     printf("--------------------------------------------------------------------------------------\n");
 }
 
+void displayBoxedWardBedStatus() {
+    for (int w = 1; w <= MAX_WARDS; w++) {
+        Ward *ward = getWardByID(w);
+        if (ward == NULL) continue;
+
+        int wardBeds = ward->totalBeds;
+        int occupied = 0;
+
+        char titleStr[60];
+        snprintf(titleStr, sizeof(titleStr), "%s BED STATUS", ward->name);
+
+        printf("\n%s+======================================+%s\n", COLOR_CYAN, COLOR_RESET);
+        printf("%s| %-36s |%s\n", COLOR_CYAN, titleStr, COLOR_RESET);
+        printf("%s+======================================+%s\n", COLOR_CYAN, COLOR_RESET);
+        printf("%s|                                      |%s\n", COLOR_CYAN, COLOR_RESET);
+
+        for (int b = 1; b <= wardBeds; b++) {
+            int bedID = (w * 100) + b;
+            int status = 0;
+            for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
+                if (beds[i].bedID == bedID) {
+                    status = beds[i].status;
+                    break;
+                }
+            }
+            if (status == 1) {
+                occupied++;
+                printf("%s|%s  Bed %02d  [%s OCCUPIED %s]   %sRED%s        %s|%s\n",
+                       COLOR_CYAN, COLOR_RESET, b, COLOR_RED, COLOR_RESET, COLOR_RED, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+            } else {
+                printf("%s|%s  Bed %02d  [%s AVAILABLE %s]  %sGREEN%s      %s|%s\n",
+                       COLOR_CYAN, COLOR_RESET, b, COLOR_GREEN, COLOR_RESET, COLOR_GREEN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+            }
+        }
+
+        float pct = (wardBeds > 0) ? ((float)occupied / (float)wardBeds) * 100.0f : 0.0f;
+        printf("%s|                                      |%s\n", COLOR_CYAN, COLOR_RESET);
+        printf("%s|%s  Occupancy: %-23.1f%% %s|%s\n", COLOR_CYAN, COLOR_RESET, pct, COLOR_CYAN, COLOR_RESET);
+        printf("%s+======================================+%s\n", COLOR_CYAN, COLOR_RESET);
+    }
+}
+
+void displayGraphicalBedCards() {
+    printf("\n%s========================================================================%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s                     GRAPHICAL BED DASHBOARD CARDS                     %s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s========================================================================%s\n", COLOR_CYAN, COLOR_RESET);
+
+    for (int w = 1; w <= MAX_WARDS; w++) {
+        Ward *ward = getWardByID(w);
+        if (ward == NULL) continue;
+
+        int wardBeds = ward->totalBeds;
+        printf("\n%s[%s]%s\n", COLOR_CYAN, ward->name, COLOR_RESET);
+
+        for (int r = 0; r < wardBeds; r += 5) {
+            int rowCount = (r + 5 <= wardBeds) ? 5 : (wardBeds - r);
+
+            for (int c = 0; c < rowCount; c++) printf("+--------+  ");
+            printf("\n");
+
+            for (int c = 0; c < rowCount; c++) printf("| BED %02d |  ", r + c + 1);
+            printf("\n");
+
+            for (int c = 0; c < rowCount; c++) {
+                int bNum = r + c + 1;
+                int bedID = (w * 100) + bNum;
+                int status = 0;
+                for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
+                    if (beds[i].bedID == bedID) {
+                        status = beds[i].status;
+                        break;
+                    }
+                }
+                if (status == 1) {
+                    printf("| %s####%s   |  ", COLOR_RED, COLOR_RESET);
+                } else {
+                    printf("|        |  ");
+                }
+            }
+            printf("\n");
+
+            for (int c = 0; c < rowCount; c++) {
+                int bNum = r + c + 1;
+                int bedID = (w * 100) + bNum;
+                int status = 0;
+                for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
+                    if (beds[i].bedID == bedID) {
+                        status = beds[i].status;
+                        break;
+                    }
+                }
+                if (status == 1) {
+                    printf("| %sOCCUP.%s |  ", COLOR_RED, COLOR_RESET);
+                } else {
+                    printf("|  %sFREE%s  |  ", COLOR_GREEN, COLOR_RESET);
+                }
+            }
+            printf("\n");
+
+            for (int c = 0; c < rowCount; c++) printf("+--------+  ");
+            printf("\n");
+        }
+    }
+}
+
 void displayBeds() {
     displayBedMatrix();
+    displayBoxedWardBedStatus();
+    displayGraphicalBedCards();
 
-    printf("\n===================================================\n");
-    printf("              HOSPITAL BED OCCUPANCY LIST          \n");
-    printf("===================================================\n");
+    printf("\n%s===================================================%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s              HOSPITAL BED OCCUPANCY LIST          %s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s===================================================%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%-8s %-8s %-12s %-18s\n", "Bed ID", "Ward ID", "Status", "Assigned Patient");
     printf("---------------------------------------------------\n");
     
     for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
         const char *statusStr = (beds[i].status == 1) ? "Occupied" : "Available";
-        printf("%-8d %-8d %-12s %-18s\n",
+        const char *statusColor = (beds[i].status == 1) ? COLOR_RED : COLOR_GREEN;
+        printf("%-8d %-8d %s%-12s%s %-18s\n",
                beds[i].bedID,
                beds[i].wardID,
-               statusStr,
+               statusColor, statusStr, COLOR_RESET,
                beds[i].assignedPatientID);
     }
     printf("---------------------------------------------------\n");

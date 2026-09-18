@@ -9,9 +9,9 @@
 #include "ui_effects.h"
 
 void displayMenu() {
-    printf("+==========================================================+\n");
-    printf("|                MAIN MENU - SMART HOSPITAL                |\n");
-    printf("+==========================================================+\n");
+    printf("%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s|                MAIN MENU - SMART HOSPITAL                |%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
     printf("|  1. Register Patient                                     |\n");
     printf("|  2. Display Patients (Registration Order)                |\n");
     printf("|  3. Display Priority Triage Queue (Emergency Priority)   |\n");
@@ -25,7 +25,7 @@ void displayMenu() {
     printf("| 11. Generate Performance Reports & Analytics             |\n");
     printf("| 12. Calculate Basic Bill                                 |\n");
     printf("| 13. Exit                                                 |\n");
-    printf("+==========================================================+\n");
+    printf("%s+==========================================================+%s\n", COLOR_CYAN, COLOR_RESET);
 }
 
 int main() {
