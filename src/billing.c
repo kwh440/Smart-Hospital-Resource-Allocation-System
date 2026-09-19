@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "billing.h"
 #include "patient.h"
@@ -166,4 +167,46 @@ void processBillCalculation() {
         printf(" Estimated Waiting Time:  %.2f mins\n", waitTime);
     }
     printf("========================================================================\n");
+
+    #ifdef _WIN32
+    system("mkdir data\\receipts 2> NUL");
+    #else
+    system("mkdir -p data/receipts 2>/dev/null");
+    #endif
+
+    char filename[64];
+    snprintf(filename, sizeof(filename), "data/receipts/%s_receipt.txt", p->id);
+    FILE *rf = fopen(filename, "w");
+    if (rf != NULL) {
+        fprintf(rf, "========================================================================\n");
+        fprintf(rf, "               SMART HOSPITAL ADMISSION & BILL                          \n");
+        fprintf(rf, "========================================================================\n");
+        fprintf(rf, " Patient ID:              %s\n", p->id);
+        fprintf(rf, " Patient Name:            %s\n", p->name);
+        fprintf(rf, " Age:                     %d Years %s\n", p->age, isSubsidyEligible ? "(15%% Subsidy Eligible)" : "(Standard Rate)");
+        fprintf(rf, " Specialty:               %s\n", specialties[specialtyID - 1].name);
+        if (p->wardID > 0) {
+            fprintf(rf, " Assigned Ward:           %s (Bed #%d)\n", assignedWard ? assignedWard->name : "Admitted", p->bedID);
+        } else {
+            fprintf(rf, " Assigned Ward:           Outpatient (OPD - No Bed Allocated)\n");
+        }
+        fprintf(rf, " Urgency Level:           %s\n", urgencyStr);
+        fprintf(rf, "------------------------------------------------------------------------\n");
+        fprintf(rf, " Base Consultation Fee:   LKR %10.2f\n", baseFee);
+        fprintf(rf, " Emergency Surcharge:     LKR %10.2f (%s)\n", surcharge, surchargePctStr);
+        fprintf(rf, " Ward Stay Cost (%d Days): LKR %10.2f\n", daysAdmitted, wardCost);
+        fprintf(rf, "------------------------------------------------------------------------\n");
+        fprintf(rf, " Gross Total Bill:        LKR %10.2f\n", grossTotal);
+        fprintf(rf, " Age Subsidy Discount:    LKR -%9.2f %s\n", discount, isSubsidyEligible ? "(15%%)" : "(0%%)");
+        fprintf(rf, "------------------------------------------------------------------------\n");
+        fprintf(rf, " Final Payable Amount:    LKR %10.2f\n", finalAmount);
+        if (p->emergencyStatus == 3) {
+            fprintf(rf, " Estimated Waiting Time:  0.00 mins (Immediate Attention)\n");
+        } else {
+            fprintf(rf, " Estimated Waiting Time:  %.2f mins\n", waitTime);
+        }
+        fprintf(rf, "========================================================================\n");
+        fclose(rf);
+        printf("\n%s[Receipt Export]%s Itemized bill saved to '%s'%s\n", COLOR_CYAN, COLOR_GREEN, filename, COLOR_RESET);
+    }
 }
