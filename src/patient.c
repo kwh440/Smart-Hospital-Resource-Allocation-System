@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include "patient.h"
 #include "ward.h"
+#include "bed.h"
 #include "ui_effects.h"
 
 Patient patients[MAX_PATIENTS];
@@ -65,7 +66,7 @@ void registerPatient() {
     }
 
     Patient p;
-    sprintf(p.id, "PAT-%04d", patientCount + 1001);
+    snprintf(p.id, sizeof(p.id), "PAT-%04d", patientCount + 1001);
 
     printf("\n--- PATIENT REGISTRATION FORM (%s) ---\n", p.id);
 
@@ -95,8 +96,34 @@ void registerPatient() {
     if (p.isAdmitted == 1) {
         displayWards();
         p.wardID = readIntBounded("Select Ward ID (1 to 4): ", 1, 4);
+
+        int allocChoice = readIntBounded("\nAllocate a bed in selected Ward now? (1 = Auto-Allocate Bed, 0 = Skip Bed Allocation): ", 0, 1);
+        if (allocChoice == 1) {
+            showBedScanningAnimation(p.wardID);
+            int availBedID = findAvailableBed(p.wardID);
+            if (availBedID != -1) {
+                for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
+                    if (beds[i].bedID == availBedID) {
+                        beds[i].status = 1;
+                        strcpy(beds[i].assignedPatientID, p.id);
+                        p.bedID = availBedID;
+                        Ward *w = getWardByID(p.wardID);
+                        if (w != NULL && w->availableBeds > 0) {
+                            w->availableBeds--;
+                        }
+                        showBedAllocationVisual(availBedID, p.id, p.name);
+                        break;
+                    }
+                }
+            } else {
+                printf("%s[Notice] Ward #%d is currently full! Bed allocation skipped.%s\n", COLOR_YELLOW, p.wardID, COLOR_RESET);
+                p.bedID = 0;
+            }
+        } else {
+            p.bedID = 0;
+        }
+
         p.daysAdmitted = readIntBounded("Enter Initial Days Admitted (e.g. 1-30): ", 0, 365);
-        p.bedID = 0; // Bed can be allocated in Bed Management
     } else {
         p.wardID = 0;
         p.bedID = 0;
@@ -107,7 +134,7 @@ void registerPatient() {
 
     showLoadingSpinner("Processing Patient Registration...", 3000);
     showTriageAlert(p.emergencyStatus, p.name);
-    printf("\n%s[Success] Patient '%s' registered successfully with assigned ID: %s!%s\n", COLOR_GREEN, p.name, p.id, COLOR_RESET);
+    printf("\n%s[Success] Patient '%s' registered successfully with assigned ID: %s%s\n", COLOR_GREEN, p.name, p.id, COLOR_RESET);
 }
 
 void displayPatients() {
@@ -116,11 +143,11 @@ void displayPatients() {
         return;
     }
 
-    printf("\n%s╔══════════════════════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("\n%s╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s║                                    REGISTERED PATIENTS DIRECTORY                                     ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s╠══════════════╦══════════════════════╦═══════╦══════════╦═════════════════╦══════════════╦════════╦════════╣%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║%s Patient ID   %s║%s Name                 %s║%s Age   %s║%s Gender %s║%s Contact       %s║%s Status       %s║%s Ward   %s║%s Bed    %s║%s\n",
-           COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_RESET);
+    printf("%s║%s Patient ID   %s║%s Name                 %s║%s Age   %s║%s Gender %s  ║%s Contact       %s  ║%s Status       %s║%s Ward   %s║%s Bed    %s║%s\n",
+           COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
     printf("%s╠══════════════╬══════════════════════╬═══════╬══════════╬═════════════════╬══════════════╬════════╬════════╣%s\n", COLOR_CYAN, COLOR_RESET);
 
     for (int i = 0; i < patientCount; i++) {

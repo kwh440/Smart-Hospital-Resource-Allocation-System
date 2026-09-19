@@ -20,5 +20,5 @@
 
 [Operating System & Storage]
 - Compatible OS: Windows 10/11, Linux, macOS
-- Disk Permissions: Read/Write access for local `./data/` directory
-- Target Binaries: Pure CLI Console Application (Zero external frameworks)
+- Disk Permissions: Read/Write access for local `./data/` directory (`patient_records.txt`, `beds_status.txt`)
+- Target Binaries: Pure CLI Console Application with ANSI VT100 Virtual Terminal color support

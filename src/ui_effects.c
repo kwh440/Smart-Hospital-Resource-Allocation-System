@@ -125,14 +125,22 @@ void showBedAllocationVisual(int bedID, const char *patientID, const char *patie
 void showTriageAlert(int emergencyStatus, const char *patientName) {
     if (emergencyStatus == 3) {
         printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_RED, COLOR_RESET);
-        printf("%s║ [!!!] CRITICAL EMERGENCY ALERT (LEVEL 3) [!!!]     ║%s\n", COLOR_RED, COLOR_RESET);
-        printf("%s║ Patient '%-26s' requires IMMEDIATE CARE ║%s\n", COLOR_RED, patientName, COLOR_RESET);
+        printf("%s║ [!!!] CRITICAL EMERGENCY ALERT (LEVEL 3)           ║%s\n", COLOR_RED, COLOR_RESET);
+        printf("%s║ Patient: %-41s ║%s\n", COLOR_RED, patientName, COLOR_RESET);
+        printf("%s║ Assigned: IMMEDIATE CARE PRIORITY                  ║%s\n", COLOR_RED, COLOR_RESET);
         printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_RED, COLOR_RESET);
     } else if (emergencyStatus == 2) {
         printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_YELLOW, COLOR_RESET);
         printf("%s║ [!] URGENT TRIAGE NOTICE (LEVEL 2)                 ║%s\n", COLOR_YELLOW, COLOR_RESET);
-        printf("%s║ Patient '%-26s' assigned HIGH PRIORITY ║%s\n", COLOR_YELLOW, patientName, COLOR_RESET);
+        printf("%s║ Patient: %-41s ║%s\n", COLOR_YELLOW, patientName, COLOR_RESET);
+        printf("%s║ Assigned: HIGH PRIORITY                            ║%s\n", COLOR_YELLOW, COLOR_RESET);
         printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_YELLOW, COLOR_RESET);
+    } else {
+        printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_GREEN, COLOR_RESET);
+        printf("%s║ [i] NORMAL TRIAGE NOTICE (LEVEL 1)                 ║%s\n", COLOR_GREEN, COLOR_RESET);
+        printf("%s║ Patient: %-41s ║%s\n", COLOR_GREEN, patientName, COLOR_RESET);
+        printf("%s║ Assigned: STANDARD OPD QUEUE                       ║%s\n", COLOR_GREEN, COLOR_RESET);
+        printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_GREEN, COLOR_RESET);
     }
     milliSleep(300);
 }
@@ -160,7 +168,7 @@ void showHospitalStatusDisplay(int totalPatients, int occupiedBeds, int totalBed
 }
 
 void drawBarChart(const char *label, int count, int totalCount, int maxBarWidth) {
-    if (maxBarWidth <= 0) maxBarWidth = 20;
+    if (maxBarWidth <= 0) maxBarWidth = 25;
     float pct = (totalCount > 0) ? ((float)count / (float)totalCount) * 100.0f : 0.0f;
     int filledBars = (totalCount > 0) ? (int)((float)count / (float)totalCount * maxBarWidth + 0.5f) : 0;
     if (filledBars > maxBarWidth) filledBars = maxBarWidth;
@@ -168,19 +176,19 @@ void drawBarChart(const char *label, int count, int totalCount, int maxBarWidth)
     const char *barColor = COLOR_GREEN;
     if (strstr(label, "Critical") != NULL || strstr(label, "ICU") != NULL) {
         barColor = COLOR_RED;
-    } else if (strstr(label, "Urgent") != NULL || strstr(label, "Emergency") != NULL) {
+    } else if (strstr(label, "Urgent") != NULL || strstr(label, "Surgical") != NULL || strstr(label, "Emergency") != NULL) {
         barColor = COLOR_YELLOW;
     }
 
-    printf(" %-22s [", label);
+    printf(" %-24s %s[%s", label, COLOR_CYAN, COLOR_RESET);
     for (int i = 0; i < maxBarWidth; i++) {
         if (i < filledBars) {
-            printf("%s*%s", barColor, COLOR_RESET);
+            printf("%s█%s", barColor, COLOR_RESET);
         } else {
             printf(" ");
         }
     }
-    printf("] %s%5.1f%%%s (%d)\n", barColor, pct, COLOR_RESET, count);
+    printf("%s] %s%5.1f%%%s (%d)\n", COLOR_CYAN, barColor, pct, COLOR_RESET, count);
 }
 
 void displayColorLegend() {

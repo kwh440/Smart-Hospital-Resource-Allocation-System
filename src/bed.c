@@ -185,26 +185,59 @@ void displayGraphicalBedCards() {
 }
 
 void displayBeds() {
+    displayColorLegend();
     displayBedMatrix();
-    displayBoxedWardBedStatus();
     displayGraphicalBedCards();
 
-    printf("\n%s===================================================%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s              HOSPITAL BED OCCUPANCY LIST          %s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s===================================================%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%-8s %-8s %-12s %-18s\n", "Bed ID", "Ward ID", "Status", "Assigned Patient");
-    printf("---------------------------------------------------\n");
-    
-    for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
-        const char *statusStr = (beds[i].status == 1) ? "Occupied" : "Available";
-        const char *statusColor = (beds[i].status == 1) ? COLOR_RED : COLOR_GREEN;
-        printf("%-8d %-8d %s%-12s%s %-18s\n",
-               beds[i].bedID,
-               beds[i].wardID,
-               statusColor, statusStr, COLOR_RESET,
-               beds[i].assignedPatientID);
+    for (int w = 1; w <= MAX_WARDS; w++) {
+        Ward *ward = getWardByID(w);
+        if (ward == NULL) continue;
+
+        char title[60];
+        snprintf(title, sizeof(title), "%s BED STATUS", ward->name);
+
+        printf("\n%s╔═════════════════════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+        printf("%s║  %-93s  ║%s\n", COLOR_CYAN, title, COLOR_RESET);
+        printf("%s╠══════════════════════╦═════════╦════════╦══════════════╦═════════════════╦═════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+        printf("%s║%s Ward Name            %s║%s Ward ID %s║%s Bed ID %s║%s Status       %s║%s Patient ID    %s║%s Assigned Patient Name %s║%s\n",
+               COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_RESET, COLOR_RESET);
+        printf("%s╠══════════════════════╬═════════╬════════╬══════════════╬═════════════════╬═════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+
+        for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
+            if (beds[i].wardID == w) {
+                const char *statusStr = (beds[i].status == 1) ? "Occupied" : "Available";
+                const char *statusColor = (beds[i].status == 1) ? COLOR_RED : COLOR_GREEN;
+
+                const char *pID = beds[i].assignedPatientID;
+                const char *pName = "None";
+
+                if (beds[i].status == 1 && strcmp(pID, "None") != 0) {
+                    Patient *p = findPatientByID(pID);
+                    if (p != NULL) {
+                        pName = p->name;
+                    } else {
+                        pName = "N/A";
+                    }
+                }
+
+                printf("%s║%s %-20s %s║%s %-7d %s║%s %-6d %s║%s %s%-12s%s %s║%s %-15s %s║%s %-23s %s║%s\n",
+                       COLOR_CYAN, COLOR_RESET,
+                       ward->name,
+                       COLOR_CYAN, COLOR_RESET,
+                       w,
+                       COLOR_CYAN, COLOR_RESET,
+                       beds[i].bedID,
+                       COLOR_CYAN, COLOR_RESET,
+                       statusColor, statusStr, COLOR_RESET,
+                       COLOR_CYAN, COLOR_RESET,
+                       pID,
+                       COLOR_CYAN, COLOR_RESET,
+                       pName,
+                       COLOR_CYAN, COLOR_RESET);
+            }
+        }
+        printf("%s╚══════════════════════╩═════════╩════════╩══════════════╩═════════════════╩═════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
     }
-    printf("---------------------------------------------------\n");
 }
 
 int findAvailableBed(int wardID) {
@@ -294,11 +327,13 @@ void allocateBed() {
     int recommendedWardID = recommendWard(p->emergencyStatus, p->age);
     Ward *recWard = getWardByID(recommendedWardID);
     
-    printf("\n[AI Recommendation] Based on age (%d) & status (%s), recommended ward is: Ward #%d (%s)\n",
-           p->age,
+    printf("\n%s[AI Recommendation]%s Based on age (%s%d years%s) & status (%s%s%s), recommended ward is: %sWard #%d (%s)%s\n",
+           COLOR_CYAN, COLOR_RESET,
+           COLOR_YELLOW, p->age, COLOR_RESET,
+           (p->emergencyStatus == 3) ? COLOR_RED : (p->emergencyStatus == 2) ? COLOR_YELLOW : COLOR_GREEN,
            (p->emergencyStatus == 3) ? "Critical" : (p->emergencyStatus == 2) ? "Urgent" : "Normal",
-           recommendedWardID,
-           recWard ? recWard->name : "General");
+           COLOR_RESET,
+           COLOR_GREEN, recommendedWardID, recWard ? recWard->name : "General", COLOR_RESET);
 
     displayWards();
     int wardID;

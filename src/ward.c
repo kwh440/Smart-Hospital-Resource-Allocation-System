@@ -9,7 +9,7 @@ void initWardsAndSpecialties() {
     wards[0] = (Ward){1, "General Ward", 3000.0f, 20, 20};
     wards[1] = (Ward){2, "Paediatric Ward", 6000.0f, 10, 10};
     wards[2] = (Ward){3, "Surgical Ward", 12000.0f, 10, 10};
-    wards[3] = (Ward){4, "ICU (Intensive Care Unit)", 25000.0f, 5, 5};
+    wards[3] = (Ward){4, "ICU", 25000.0f, 5, 5};
 
     specialties[0] = (Specialty){1, "General Practice (OPD)", 1500.0f, 15, 50};
     specialties[1] = (Specialty){2, "Paediatrics", 2500.0f, 20, 30};

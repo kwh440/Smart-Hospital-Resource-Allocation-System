@@ -4,7 +4,7 @@
 #define MAX_PATIENTS 100
 
 typedef struct {
-    char id[15];
+    char id[20];
     char name[50];
     int age;
     char gender[10];
