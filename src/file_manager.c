@@ -7,8 +7,8 @@
 #include "ward.h"
 #include "ui_effects.h"
 
-#define PATIENT_FILE "data/patients.txt"
-#define BED_FILE "data/beds.txt"
+#define PATIENT_FILE "data/patient_records.txt"
+#define BED_FILE "data/beds_status.txt"
 
 void initDirectoriesAndFiles() {
     FILE *fp = fopen(PATIENT_FILE, "a");
@@ -33,7 +33,7 @@ void savePatientRecords() {
     fprintf(fp, "%d\n", patientCount);
 
     for (int i = 0; i < patientCount; i++) {
-        fprintf(fp, "%s;%s;%d;%s;%s;%s;%d;%d;%d\n",
+        fprintf(fp, "%s;%s;%d;%s;%s;%s;%d;%d;%d;%d;%d;%d\n",
                 patients[i].id,
                 patients[i].name,
                 patients[i].age,
@@ -41,8 +41,11 @@ void savePatientRecords() {
                 patients[i].contact,
                 patients[i].condition,
                 patients[i].emergencyStatus,
+                patients[i].specialtyID,
+                patients[i].isAdmitted,
                 patients[i].wardID,
-                patients[i].bedID);
+                patients[i].bedID,
+                patients[i].daysAdmitted);
     }
 
     fclose(fp);
@@ -65,6 +68,7 @@ void loadPatientRecords() {
     patientCount = 0;
     for (int i = 0; i < count && i < MAX_PATIENTS; i++) {
         Patient p;
+        memset(&p, 0, sizeof(Patient));
         char line[256];
         if (fgets(line, sizeof(line), fp) != NULL) {
             line[strcspn(line, "\r\n")] = '\0';
@@ -91,10 +95,19 @@ void loadPatientRecords() {
             if (token) p.emergencyStatus = atoi(token);
 
             token = strtok(NULL, ";");
+            if (token) p.specialtyID = atoi(token);
+
+            token = strtok(NULL, ";");
+            if (token) p.isAdmitted = atoi(token);
+
+            token = strtok(NULL, ";");
             if (token) p.wardID = atoi(token);
 
             token = strtok(NULL, ";");
             if (token) p.bedID = atoi(token);
+
+            token = strtok(NULL, ";");
+            if (token) p.daysAdmitted = atoi(token);
 
             patients[patientCount++] = p;
         }

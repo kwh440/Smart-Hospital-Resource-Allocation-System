@@ -17,7 +17,7 @@ float calculateEmergencySurcharge(float baseFee, int emergencyStatus) {
     if (emergencyStatus == 3) {
         return baseFee * 0.50f; // 50% Surcharge for Level 3 Critical
     } else if (emergencyStatus == 2) {
-        return baseFee * 0.25f; // 25% Surcharge for Level 2 Urgent
+        return baseFee * 0.20f; // 20% Surcharge for Level 2 Urgent (Fixed per specification)
     }
     return 0.0f; // 0% Surcharge for Level 1 Normal
 }
@@ -50,19 +50,24 @@ float calculateEstimatedWaitTime(int specialtyID, int emergencyStatus) {
         return 0.0f; // Level 3 Critical case gets immediate attention (0 wait time)
     }
 
-    // Standard consultation times per specialty (mins)
     int avgTime = 15;
-    if (specialtyID == 2) avgTime = 20;      // Pediatrics
-    else if (specialtyID == 3) avgTime = 30; // Cardiology
-    else if (specialtyID == 4) avgTime = 30; // Neurology
-    else if (specialtyID == 5) avgTime = 25; // Orthopedics
+    if (specialtyID >= 1 && specialtyID <= MAX_SPECIALTIES) {
+        avgTime = specialties[specialtyID - 1].consultationTime;
+    }
 
-    // Count patients assigned to this specialty
+    // Count non-critical patients in queue for this specialty
     int queueCount = 0;
     for (int i = 0; i < patientCount; i++) {
-        // Count non-critical patients in queue
-        if (patients[i].emergencyStatus != 3) {
+        if (patients[i].emergencyStatus != 3 && patients[i].specialtyID == specialtyID) {
             queueCount++;
+        }
+    }
+    // If no specialty assigned, fallback to general non-critical queue count
+    if (queueCount == 0) {
+        for (int i = 0; i < patientCount; i++) {
+            if (patients[i].emergencyStatus != 3) {
+                queueCount++;
+            }
         }
     }
 
@@ -78,6 +83,7 @@ void processBillCalculation() {
     char patientID[15];
     printf("\nEnter Patient ID for bill calculation (e.g., PAT-1001): ");
     scanf("%14s", patientID);
+    clearInputBuffer();
 
     Patient *p = findPatientByID(patientID);
     if (p == NULL) {
@@ -85,16 +91,15 @@ void processBillCalculation() {
         return;
     }
 
-    displaySpecialties();
-    int specialtyID;
-    printf("Select Doctor Specialty ID for consultation (1-5): ");
-    if (scanf("%d", &specialtyID) != 1 || specialtyID < 1 || specialtyID > 5) {
-        printf("[Note] Invalid specialty selection. Defaulting to Specialty #1 (General Medicine).\n");
-        specialtyID = 1;
+    int specialtyID = p->specialtyID;
+    if (specialtyID < 1 || specialtyID > MAX_SPECIALTIES) {
+        displaySpecialties();
+        specialtyID = readIntBounded("Select Doctor Specialty ID for consultation (1-7): ", 1, MAX_SPECIALTIES);
+        p->specialtyID = specialtyID;
     }
     float baseFee = specialties[specialtyID - 1].baseFee;
 
-    int daysAdmitted = 0;
+    int daysAdmitted = p->daysAdmitted;
     float dailyRate = 0.0f;
     Ward *assignedWard = NULL;
 
@@ -103,13 +108,19 @@ void processBillCalculation() {
         if (assignedWard != NULL) {
             dailyRate = assignedWard->dailyRate;
         }
-        printf("Enter number of days admitted in Ward #%d (%s): ", p->wardID, (assignedWard ? assignedWard->name : "Ward"));
-        if (scanf("%d", &daysAdmitted) != 1 || daysAdmitted < 0) {
-            daysAdmitted = 0;
+
+        printf("\n[Verification Prompt] Is Days Admitted correct (%d days)? (1 = Yes, 0 = Update): ", p->daysAdmitted);
+        int confirmDays;
+        if (scanf("%d", &confirmDays) == 1 && confirmDays == 0) {
+            daysAdmitted = readIntBounded("Enter updated/correct Days Admitted: ", 0, 365);
+            p->daysAdmitted = daysAdmitted;
+            printf("[Update] Days Admitted updated to %d days.\n", p->daysAdmitted);
+        } else {
+            clearInputBuffer();
         }
     }
 
-    // Perform V4 Advanced Financial Calculations
+    // Perform Financial Calculations
     float surcharge = calculateEmergencySurcharge(baseFee, p->emergencyStatus);
     float wardCost = calculateWardCost(dailyRate, daysAdmitted);
     float grossTotal = calculateGrossTotalV4(baseFee, surcharge, wardCost);
@@ -121,19 +132,19 @@ void processBillCalculation() {
     const char *urgencyStr = (p->emergencyStatus == 3) ? "Level 3 (Critical)" :
                              (p->emergencyStatus == 2) ? "Level 2 (Urgent)" : "Level 1 (Normal)";
     const char *surchargePctStr = (p->emergencyStatus == 3) ? "50%" :
-                                  (p->emergencyStatus == 2) ? "25%" : "0%";
+                                  (p->emergencyStatus == 2) ? "20%" : "0%";
 
     showLoadingSpinner("Calculating billing breakdown & subsidies...", 3000);
 
     printf("\n========================================================================\n");
-    printf("               SMART HOSPITAL ADMISSION & BILL STATEMENT                \n");
+    printf("               SMART HOSPITAL ADMISSION & BILL                          \n");
     printf("========================================================================\n");
     printf(" Patient ID:              %s\n", p->id);
     printf(" Patient Name:            %s\n", p->name);
     printf(" Age:                     %d Years %s\n", p->age, isSubsidyEligible ? "(15% Subsidy Eligible)" : "(Standard Rate)");
     printf(" Specialty:               %s\n", specialties[specialtyID - 1].name);
     
-    if (p->wardID > 0 && p->bedID > 0) {
+    if (p->wardID > 0) {
         printf(" Assigned Ward:           %s (Bed #%d)\n", assignedWard ? assignedWard->name : "Admitted", p->bedID);
     } else {
         printf(" Assigned Ward:           Outpatient (OPD - No Bed Allocated)\n");
@@ -146,11 +157,11 @@ void processBillCalculation() {
     printf(" Ward Stay Cost (%d Days): LKR %10.2f\n", daysAdmitted, wardCost);
     printf("------------------------------------------------------------------------\n");
     printf(" Gross Total Bill:        LKR %10.2f\n", grossTotal);
-    printf(" Age Subsidy Discount:    LKR %10.2f %s\n", -discount, isSubsidyEligible ? "(-15%)" : "(0%)");
+    printf(" Age Subsidy Discount:    LKR -%9.2f %s\n", discount, isSubsidyEligible ? "(15%)" : "(0%)");
     printf("------------------------------------------------------------------------\n");
     printf(" Final Payable Amount:    LKR %10.2f\n", finalAmount);
     if (p->emergencyStatus == 3) {
-        printf(" Estimated Waiting Time:  %.2f mins (Immediate Attention)\n", waitTime);
+        printf(" Estimated Waiting Time:  0.00 mins (Immediate Attention)\n");
     } else {
         printf(" Estimated Waiting Time:  %.2f mins\n", waitTime);
     }

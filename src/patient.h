@@ -11,8 +11,11 @@ typedef struct {
     char contact[20];
     char condition[50];
     int emergencyStatus;
+    int specialtyID;
+    int isAdmitted;
     int wardID;
     int bedID;
+    int daysAdmitted;
 } Patient;
 
 extern Patient patients[MAX_PATIENTS];

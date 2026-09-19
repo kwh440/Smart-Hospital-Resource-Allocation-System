@@ -2,7 +2,7 @@
 #define WARD_H
 
 #define MAX_WARDS 4
-#define MAX_SPECIALTIES 5
+#define MAX_SPECIALTIES 7
 
 typedef struct {
     int wardID;
@@ -16,6 +16,8 @@ typedef struct {
     int specialtyID;
     char name[40];
     float baseFee;
+    int consultationTime; // Average consultation time in minutes
+    int dailyCap;         // Max daily patient limit
 } Specialty;
 
 extern Ward wards[MAX_WARDS];

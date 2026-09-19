@@ -2,6 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "patient.h"
+#include "ward.h"
 #include "ui_effects.h"
 
 Patient patients[MAX_PATIENTS];
@@ -82,12 +83,25 @@ void registerPatient() {
 
     readGender(p.gender, sizeof(p.gender));
 
+    displaySpecialties();
+    p.specialtyID = readIntBounded("Select Doctor Specialty ID (1 to 7): ", 1, 7);
+
     readStringNonEmpty("Enter Medical Condition / Visit Reason: ", p.condition, sizeof(p.condition));
 
     p.emergencyStatus = readIntBounded("Enter Emergency Status (1 = Normal OPD, 2 = Urgent, 3 = Critical Emergency): ", 1, 3);
 
-    p.wardID = 0;
-    p.bedID = 0;
+    p.isAdmitted = readIntBounded("Is Patient Admitted to Ward? (1 = Yes, 0 = No / OPD): ", 0, 1);
+
+    if (p.isAdmitted == 1) {
+        displayWards();
+        p.wardID = readIntBounded("Select Ward ID (1 to 4): ", 1, 4);
+        p.daysAdmitted = readIntBounded("Enter Initial Days Admitted (e.g. 1-30): ", 0, 365);
+        p.bedID = 0; // Bed can be allocated in Bed Management
+    } else {
+        p.wardID = 0;
+        p.bedID = 0;
+        p.daysAdmitted = 0;
+    }
 
     patients[patientCount++] = p;
 
@@ -106,7 +120,7 @@ void displayPatients() {
     printf("%s║                                    REGISTERED PATIENTS DIRECTORY                                     ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s╠══════════════╦══════════════════════╦═══════╦══════════╦═════════════════╦══════════════╦════════╦════════╣%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s║%s Patient ID   %s║%s Name                 %s║%s Age   %s║%s Gender %s║%s Contact       %s║%s Status       %s║%s Ward   %s║%s Bed    %s║%s\n",
-           COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+           COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_RESET);
     printf("%s╠══════════════╬══════════════════════╬═══════╬══════════╬═════════════════╬══════════════╬════════╬════════╣%s\n", COLOR_CYAN, COLOR_RESET);
 
     for (int i = 0; i < patientCount; i++) {
@@ -237,9 +251,12 @@ void searchPatient() {
             printf("Age              : %d Years\n", p->age);
             printf("Gender           : %s\n", p->gender);
             printf("Contact          : %s\n", p->contact);
+            printf("Specialty        : %s (ID #%d)\n", (p->specialtyID >= 1 && p->specialtyID <= MAX_SPECIALTIES) ? specialties[p->specialtyID - 1].name : "General", p->specialtyID);
             printf("Condition        : %s\n", p->condition);
             printf("Emergency Status : %s\n", (p->emergencyStatus == 3) ? "Critical" : (p->emergencyStatus == 2) ? "Urgent" : "Normal");
+            printf("Admission Status : %s\n", p->isAdmitted ? "Admitted" : "OPD (Outpatient)");
             printf("Ward ID / Bed ID : %d / %d\n", p->wardID, p->bedID);
+            printf("Days Admitted    : %d Days\n", p->daysAdmitted);
             printf("----------------------------\n");
         }
     } else {
