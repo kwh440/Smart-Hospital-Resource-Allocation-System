@@ -11,10 +11,10 @@ void initWardsAndSpecialties() {
     wards[2] = (Ward){3, "Surgical Ward", 12000.0f, 10, 10};
     wards[3] = (Ward){4, "ICU", 25000.0f, 5, 5};
 
-    specialties[0] = (Specialty){1, "General Practice (OPD)", 1500.0f, 15, 50};
-    specialties[1] = (Specialty){2, "Paediatrics", 2500.0f, 20, 30};
-    specialties[2] = (Specialty){3, "Cardiology", 4500.0f, 30, 20};
-    specialties[3] = (Specialty){4, "Neurology", 5000.0f, 15, 15};
+    specialties[0] = (Specialty){1, "General Practice (OPD)", 1500.0f, 15, 30};
+    specialties[1] = (Specialty){2, "Paediatrics", 2500.0f, 20, 20};
+    specialties[2] = (Specialty){3, "Cardiology", 4500.0f, 30, 12};
+    specialties[3] = (Specialty){4, "Neurology", 5000.0f, 30, 10};
     specialties[4] = (Specialty){5, "Orthopedics", 3500.0f, 25, 25};
     specialties[5] = (Specialty){6, "Dermatology", 3000.0f, 15, 30};
     specialties[6] = (Specialty){7, "ENT (Ear, Nose, Throat)", 3200.0f, 15, 30};

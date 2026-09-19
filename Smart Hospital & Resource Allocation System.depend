@@ -36,7 +36,7 @@
 
 1789591363 c:\users\rupik\onedrive\desktop\medical\src\file_manager.h
 
-1789818765 source:c:\users\rupik\onedrive\desktop\medical\src\ward.c
+1789830262 source:c:\users\rupik\onedrive\desktop\medical\src\ward.c
 	<stdio.h>
 	<string.h>
 	"ward.h"
@@ -63,7 +63,7 @@
 
 1789780373 c:\users\rupik\onedrive\desktop\medical\src\reports.h
 
-1789780373 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
+1789830287 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
 	<stdio.h>
 	<string.h>
 	"reports.h"

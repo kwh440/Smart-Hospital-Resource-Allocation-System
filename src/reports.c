@@ -65,9 +65,12 @@ void generatePerformanceReport() {
     int maxPatientIndex = -1;
 
     for (int i = 0; i < patientCount; i++) {
-        float baseFee = 1500.0f; // Default General Practice
-        float dailyRate = 0.0f;
+        float baseFee = 1500.0f;
+        if (patients[i].specialtyID >= 1 && patients[i].specialtyID <= MAX_SPECIALTIES) {
+            baseFee = specialties[patients[i].specialtyID - 1].baseFee;
+        }
 
+        float dailyRate = 0.0f;
         if (patients[i].wardID > 0) {
             Ward *w = getWardByID(patients[i].wardID);
             if (w != NULL) {
@@ -75,8 +78,7 @@ void generatePerformanceReport() {
             }
         }
 
-        // Estimate stay duration (1 day default for admitted patients if days not set)
-        int stayDays = (patients[i].wardID > 0) ? 1 : 0;
+        int stayDays = (patients[i].wardID > 0) ? patients[i].daysAdmitted : 0;
 
         float surcharge = calculateEmergencySurcharge(baseFee, patients[i].emergencyStatus);
         float wardCost = calculateWardCost(dailyRate, stayDays);
