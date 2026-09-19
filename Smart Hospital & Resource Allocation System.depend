@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1789818949 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
+1789833145 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
 	<stdio.h>
 	<string.h>
 	"bed.h"
@@ -7,14 +7,15 @@
 	"patient.h"
 	"ui_effects.h"
 
-1789780373 c:\users\rupik\onedrive\desktop\medical\src\bed.h
+1789832516 c:\users\rupik\onedrive\desktop\medical\src\bed.h
 
-1789781261 c:\users\rupik\onedrive\desktop\medical\src\ward.h
+1789832382 c:\users\rupik\onedrive\desktop\medical\src\ward.h
 
-1789819043 c:\users\rupik\onedrive\desktop\medical\src\patient.h
+1789832437 c:\users\rupik\onedrive\desktop\medical\src\patient.h
 
-1789781307 source:c:\users\rupik\onedrive\desktop\medical\src\billing.c
+1789832654 source:c:\users\rupik\onedrive\desktop\medical\src\billing.c
 	<stdio.h>
+	<stdlib.h>
 	<string.h>
 	"billing.h"
 	"patient.h"
@@ -22,9 +23,9 @@
 	"bed.h"
 	"ui_effects.h"
 
-1789637265 c:\users\rupik\onedrive\desktop\medical\src\billing.h
+1789832607 c:\users\rupik\onedrive\desktop\medical\src\billing.h
 
-1789781318 source:c:\users\rupik\onedrive\desktop\medical\src\file_manager.c
+1789832927 source:c:\users\rupik\onedrive\desktop\medical\src\file_manager.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -34,14 +35,14 @@
 	"ward.h"
 	"ui_effects.h"
 
-1789591363 c:\users\rupik\onedrive\desktop\medical\src\file_manager.h
+1789832883 c:\users\rupik\onedrive\desktop\medical\src\file_manager.h
 
-1789830262 source:c:\users\rupik\onedrive\desktop\medical\src\ward.c
+1789832408 source:c:\users\rupik\onedrive\desktop\medical\src\ward.c
 	<stdio.h>
 	<string.h>
 	"ward.h"
 
-1789780373 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
+1789832979 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
 	<stdio.h>
 	<stdlib.h>
 	"patient.h"
@@ -52,7 +53,7 @@
 	"file_manager.h"
 	"ui_effects.h"
 
-1789821513 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
+1789833184 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
 	<stdio.h>
 	<string.h>
 	<ctype.h>
@@ -61,9 +62,9 @@
 	"bed.h"
 	"ui_effects.h"
 
-1789780373 c:\users\rupik\onedrive\desktop\medical\src\reports.h
+1789832693 c:\users\rupik\onedrive\desktop\medical\src\reports.h
 
-1789830287 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
+1789832745 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
 	<stdio.h>
 	<string.h>
 	"reports.h"
@@ -73,9 +74,9 @@
 	"billing.h"
 	"ui_effects.h"
 
-1789780373 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
+1789832787 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
 
-1789818789 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
+1789832831 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

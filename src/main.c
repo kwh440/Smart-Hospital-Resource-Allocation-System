@@ -1,3 +1,11 @@
+/*
+ * Smart Hospital & Resource Allocation System
+ *
+ * File: main.c
+ * Purpose: Entry point for the Smart Hospital System. Contains the interactive menu loop,
+ *          system initialization sequence, option dispatcher, and shutdown routine.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "patient.h"
@@ -8,6 +16,16 @@
 #include "file_manager.h"
 #include "ui_effects.h"
 
+/* ============================================================
+   PROGRAM MENU DISPLAY
+   ============================================================ */
+
+/*
+ * Function: displayMenu
+ * Purpose : Renders the 13 categorized main menu choices in a double-line boxed layout.
+ * Input   : None
+ * Returns : None
+ */
 void displayMenu() {
     printf("\n");
     printf("%s╔════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
@@ -34,20 +52,38 @@ void displayMenu() {
     printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 }
 
+/* ============================================================
+   MAIN EXECUTION ENTRY POINT
+   ============================================================ */
+
+/*
+ * Function: main
+ * Purpose : Application main entry point. Initializes console colors, loads persistent disk data,
+ *           and runs the menu selection loop until option 13 is chosen.
+ * Input   : None
+ * Returns : 0 on successful execution.
+ */
 int main() {
+    /* Step 1: Enable console virtual terminal mode for VT100 colors */
     enableVTMode();
+
+    /* Step 2: Show animated initialization screen */
     displayStartupScreen();
 
+    /* Step 3: Initialize data directories, lookup tables, and bed array */
     initDirectoriesAndFiles();
     initWardsAndSpecialties();
     initBeds();
 
+    /* Step 4: Load previously saved patient and bed records from text files */
     loadBedStatus();
     loadPatientRecords();
 
+    /* Step 5: Interactive main menu execution loop */
     while (1) {
         displayMenu();
 
+        /* Read and validate menu choice (1 to 13) */
         int choice = readIntBounded("Enter your choice (1-13): ", 1, 13);
 
         switch (choice) {
@@ -100,6 +136,7 @@ int main() {
                 pauseConsole();
                 break;
             case 13:
+                /* Save state to disk before exiting system */
                 printf("\nSaving data records to disk before exiting...\n");
                 savePatientRecords();
                 saveBedStatus();

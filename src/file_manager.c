@@ -1,3 +1,11 @@
+/*
+ * Smart Hospital & Resource Allocation System
+ *
+ * File: file_manager.c
+ * Purpose: Implementation of text file handling for permanent persistence of patient records
+ *          (data/patient_records.txt) and hospital bed matrix status (data/beds_status.txt).
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,9 +15,23 @@
 #include "ward.h"
 #include "ui_effects.h"
 
+/* ============================================================
+   FILE PERSISTENCE PATH MACROS
+   ============================================================ */
+
 #define PATIENT_FILE "data/patient_records.txt"
 #define BED_FILE "data/beds_status.txt"
 
+/* ============================================================
+   DIRECTORY & FILE INITIALIZATION
+   ============================================================ */
+
+/*
+ * Function: initDirectoriesAndFiles
+ * Purpose : Ensures the data directory exists and checks read/write access for persistent files.
+ * Input   : None
+ * Returns : None
+ */
 void initDirectoriesAndFiles() {
     FILE *fp = fopen(PATIENT_FILE, "a");
     if (fp != NULL) {
@@ -23,6 +45,17 @@ void initDirectoriesAndFiles() {
     }
 }
 
+/* ============================================================
+   PATIENT RECORDS FILE OPERATIONS
+   ============================================================ */
+
+/*
+ * Function: savePatientRecords
+ * Purpose : Writes all active patient records from global array into data/patient_records.txt
+ *           using semicolon (;) delimited formatting.
+ * Input   : None
+ * Returns : None
+ */
 void savePatientRecords() {
     FILE *fp = fopen(PATIENT_FILE, "w");
     if (fp == NULL) {
@@ -30,8 +63,10 @@ void savePatientRecords() {
         return;
     }
 
+    /* Write total patient count header */
     fprintf(fp, "%d\n", patientCount);
 
+    /* Write individual patient records (semicolon delimited tokens) */
     for (int i = 0; i < patientCount; i++) {
         fprintf(fp, "%s;%s;%d;%s;%s;%s;%d;%d;%d;%d;%d;%d\n",
                 patients[i].id,
@@ -53,10 +88,17 @@ void savePatientRecords() {
     printf("[File Storage] Saved %d patient record(s) to '%s'.\n", patientCount, PATIENT_FILE);
 }
 
+/*
+ * Function: loadPatientRecords
+ * Purpose : Reads patient record tokens from data/patient_records.txt during system startup
+ *           and restores global patients array state.
+ * Input   : None
+ * Returns : None
+ */
 void loadPatientRecords() {
     FILE *fp = fopen(PATIENT_FILE, "r");
     if (fp == NULL) {
-        return;
+        return; /* File does not exist yet (first run) */
     }
 
     int count = 0;
@@ -71,8 +113,9 @@ void loadPatientRecords() {
         memset(&p, 0, sizeof(Patient));
         char line[256];
         if (fgets(line, sizeof(line), fp) != NULL) {
-            line[strcspn(line, "\r\n")] = '\0';
+            line[strcspn(line, "\r\n")] = '\0'; /* Strip newline characters */
             
+            /* Tokenize line by semicolon (;) delimiter */
             char *token = strtok(line, ";");
             if (token) strcpy(p.id, token);
             
@@ -118,6 +161,16 @@ void loadPatientRecords() {
     printf("[File Storage] Successfully loaded %d patient record(s) from '%s'.\n", patientCount, PATIENT_FILE);
 }
 
+/* ============================================================
+   BED STATUS FILE OPERATIONS
+   ============================================================ */
+
+/*
+ * Function: saveBedStatus
+ * Purpose : Writes complete 45-bed hospital occupancy state to data/beds_status.txt.
+ * Input   : None
+ * Returns : None
+ */
 void saveBedStatus() {
     FILE *fp = fopen(BED_FILE, "w");
     if (fp == NULL) {
@@ -138,10 +191,17 @@ void saveBedStatus() {
     printf("[File Storage] Saved bed matrix status to '%s'.\n", BED_FILE);
 }
 
+/*
+ * Function: loadBedStatus
+ * Purpose : Reads bed status records from data/beds_status.txt during startup
+ *           and updates ward available bed counters.
+ * Input   : None
+ * Returns : None
+ */
 void loadBedStatus() {
     FILE *fp = fopen(BED_FILE, "r");
     if (fp == NULL) {
-        return;
+        return; /* File does not exist yet */
     }
 
     for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
@@ -161,6 +221,7 @@ void loadBedStatus() {
             token = strtok(NULL, ";");
             if (token) strcpy(beds[i].assignedPatientID, token);
 
+            /* Decrement available ward bed counter if bed is occupied */
             if (beds[i].status == 1) {
                 Ward *w = getWardByID(beds[i].wardID);
                 if (w != NULL && w->availableBeds > 0) {

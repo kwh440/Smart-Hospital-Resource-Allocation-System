@@ -1,3 +1,11 @@
+/*
+ * Smart Hospital & Resource Allocation System
+ *
+ * File: ui_effects.c
+ * Purpose: Cross-platform timer delays, VT100 virtual terminal initialization,
+ *          animated startup screens, progress bars, spinners, and graphical ASCII block charts.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,6 +17,16 @@
 #include <unistd.h>
 #endif
 
+/* ============================================================
+   CROSS-PLATFORM HELPER FUNCTIONS
+   ============================================================ */
+
+/*
+ * Function: milliSleep
+ * Purpose : Provides cross-platform millisecond thread pause utility.
+ * Input   : milliseconds - Delay duration in milliseconds.
+ * Returns : None
+ */
 static void milliSleep(int milliseconds) {
 #ifdef _WIN32
     Sleep(milliseconds);
@@ -17,9 +35,16 @@ static void milliSleep(int milliseconds) {
 #endif
 }
 
+/*
+ * Function: enableVTMode
+ * Purpose : Enables Virtual Terminal Processing and UTF-8 code page (65001) on Windows CMD / PowerShell
+ *           to display ANSI colors and unicode box borders.
+ * Input   : None
+ * Returns : None
+ */
 void enableVTMode() {
 #ifdef _WIN32
-    SetConsoleOutputCP(65001); // 65001 = CP_UTF8 (Fixes garbled unicode box characters in Windows CMD)
+    SetConsoleOutputCP(65001); /* Set console code page to UTF-8 */
     SetConsoleCP(65001);
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hOut != INVALID_HANDLE_VALUE) {
@@ -32,6 +57,16 @@ void enableVTMode() {
 #endif
 }
 
+/* ============================================================
+   STARTUP & INTERACTION VISUALS
+   ============================================================ */
+
+/*
+ * Function: displayStartupScreen
+ * Purpose : Displays animated startup initialization screen with progress bar.
+ * Input   : None
+ * Returns : None
+ */
 void displayStartupScreen() {
     enableVTMode();
     printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
@@ -57,12 +92,24 @@ void displayStartupScreen() {
     milliSleep(400);
 }
 
+/*
+ * Function: drawBoxHeader
+ * Purpose : Prints a double-line cyan boxed header banner.
+ * Input   : title - Text label inside header box.
+ * Returns : None
+ */
 void drawBoxHeader(const char *title) {
     printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s║ %-50s ║%s\n", COLOR_CYAN, title, COLOR_RESET);
     printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 }
 
+/*
+ * Function: pauseConsole
+ * Purpose : Pauses execution until the user presses Enter key.
+ * Input   : None
+ * Returns : None
+ */
 void pauseConsole() {
     printf("\n[Press ENTER to return to menu...]");
     fflush(stdout);
@@ -70,6 +117,18 @@ void pauseConsole() {
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+/* ============================================================
+   PROGRESS BARS & ANIMATED SPINNERS
+   ============================================================ */
+
+/*
+ * Function: showProgressBar
+ * Purpose : Displays a colored progress bar for file storage or long operations.
+ * Input   : label        - Operation description text.
+ *           totalSteps   - Total progress step count.
+ *           stepDelayMs  - Delay in milliseconds per step.
+ * Returns : None
+ */
 void showProgressBar(const char *label, int totalSteps, int stepDelayMs) {
     if (totalSteps <= 0) totalSteps = 20;
     if (stepDelayMs <= 0) stepDelayMs = 15;
@@ -84,10 +143,17 @@ void showProgressBar(const char *label, int totalSteps, int stepDelayMs) {
     printf("%s] 100%%%s\n", COLOR_GREEN, COLOR_RESET);
 }
 
+/*
+ * Function: showLoadingSpinner
+ * Purpose : Displays a 3-second animated loading spinner (| / - \) for billing and sorting.
+ * Input   : label      - Loading prompt text.
+ *           durationMs - Total duration in milliseconds (enforced minimum 3000ms).
+ * Returns : None
+ */
 void showLoadingSpinner(const char *label, int durationMs) {
-    if (durationMs < 3000) durationMs = 3000; // Enforce at least 3 seconds duration
+    if (durationMs < 3000) durationMs = 3000; /* Minimum 3 seconds duration */
     static const char spinnerChars[] = "|/-\\";
-    int frameDelay = 120; // Smooth, clearly visible rotation pace
+    int frameDelay = 120;
     int totalFrames = durationMs / frameDelay;
 
     printf("\n");
@@ -100,6 +166,16 @@ void showLoadingSpinner(const char *label, int durationMs) {
     fflush(stdout);
 }
 
+/* ============================================================
+   HOSPITAL VISUAL EFFECTS & ALERTS
+   ============================================================ */
+
+/*
+ * Function: showBedScanningAnimation
+ * Purpose : Renders a scanning progress animation for finding free beds in a ward.
+ * Input   : wardID - Target ward ID.
+ * Returns : None
+ */
 void showBedScanningAnimation(int wardID) {
     printf("\n%s[Bed Matrix] Scanning Ward #%d Bed Availability:%s [ ", COLOR_CYAN, wardID, COLOR_RESET);
     fflush(stdout);
@@ -111,6 +187,14 @@ void showBedScanningAnimation(int wardID) {
     printf("] -> %sAVAILABLE BED FOUND [OK]%s\n", COLOR_GREEN, COLOR_RESET);
 }
 
+/*
+ * Function: showBedAllocationVisual
+ * Purpose : Renders a double-line confirmation banner when a bed is allocated.
+ * Input   : bedID       - Assigned bed ID.
+ *           patientID   - Patient ID string.
+ *           patientName - Patient full name.
+ * Returns : None
+ */
 void showBedAllocationVisual(int bedID, const char *patientID, const char *patientName) {
     printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_GREEN, COLOR_RESET);
     printf("%s║              BED ALLOCATION CONFIRMATION           ║%s\n", COLOR_GREEN, COLOR_RESET);
@@ -122,6 +206,16 @@ void showBedAllocationVisual(int bedID, const char *patientID, const char *patie
     printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_GREEN, COLOR_RESET);
 }
 
+/*
+ * Function: showTriageAlert
+ * Purpose : Displays emergency triage alert notice box color-coded by urgency level:
+ *           - Level 3 Critical : RED
+ *           - Level 2 Urgent   : YELLOW
+ *           - Level 1 Normal   : GREEN
+ * Input   : emergencyStatus - Urgency status level (1, 2, 3).
+ *           patientName     - Registered patient name.
+ * Returns : None
+ */
 void showTriageAlert(int emergencyStatus, const char *patientName) {
     if (emergencyStatus == 3) {
         printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_RED, COLOR_RESET);
@@ -145,10 +239,24 @@ void showTriageAlert(int emergencyStatus, const char *patientName) {
     milliSleep(300);
 }
 
+/*
+ * Function: showTriageQueueSortingAnimation
+ * Purpose : Triggers priority queue sorting animation.
+ * Input   : None
+ * Returns : None
+ */
 void showTriageQueueSortingAnimation() {
     showLoadingSpinner("Sorting Triage Priority Queue (Critical -> Urgent -> Normal)", 3000);
 }
 
+/*
+ * Function: showHospitalStatusDisplay
+ * Purpose : Renders real-time hospital statistics box.
+ * Input   : totalPatients - Total registered patient count.
+ *           occupiedBeds  - Total occupied bed count.
+ *           totalBeds     - Total hospital bed capacity.
+ * Returns : None
+ */
 void showHospitalStatusDisplay(int totalPatients, int occupiedBeds, int totalBeds) {
     float occupancyPct = (totalBeds > 0) ? ((float)occupiedBeds / (float)totalBeds) * 100.0f : 0.0f;
     const char *pctColor = (occupancyPct > 80.0f ? COLOR_RED : occupancyPct > 50.0f ? COLOR_YELLOW : COLOR_GREEN);
@@ -167,6 +275,22 @@ void showHospitalStatusDisplay(int totalPatients, int occupiedBeds, int totalBed
     printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 }
 
+/* ============================================================
+   GRAPHICAL ASCII BLOCK CHARTS
+   ============================================================ */
+
+/*
+ * Function: drawBarChart
+ * Purpose : Renders horizontal solid ASCII block bar charts (█) color-coded by metric:
+ *           - Critical / ICU   : RED
+ *           - Urgent / Surgical: YELLOW
+ *           - Normal / General : GREEN
+ * Input   : label       - Category metric title.
+ *           count       - Current item count.
+ *           totalCount  - Total category count.
+ *           maxBarWidth - Maximum block bar character width.
+ * Returns : None
+ */
 void drawBarChart(const char *label, int count, int totalCount, int maxBarWidth) {
     if (maxBarWidth <= 0) maxBarWidth = 25;
     float pct = (totalCount > 0) ? ((float)count / (float)totalCount) * 100.0f : 0.0f;
@@ -191,6 +315,12 @@ void drawBarChart(const char *label, int count, int totalCount, int maxBarWidth)
     printf("%s] %s%5.1f%%%s (%d)\n", COLOR_CYAN, barColor, pct, COLOR_RESET, count);
 }
 
+/*
+ * Function: displayColorLegend
+ * Purpose : Displays visual key guide for ANSI terminal status colors.
+ * Input   : None
+ * Returns : None
+ */
 void displayColorLegend() {
     printf("\n%s[LEGEND]%s  %s[AVAILABLE / SUCCESS]%s  %s[URGENT / WARNING]%s  %s[OCCUPIED / CRITICAL]%s  %s[HEADINGS]%s\n",
            COLOR_BOLD, COLOR_RESET,

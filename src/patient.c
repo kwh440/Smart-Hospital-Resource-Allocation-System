@@ -1,3 +1,11 @@
+/*
+ * Smart Hospital & Resource Allocation System
+ *
+ * File: patient.c
+ * Purpose: Patient registration intake, duplicate validation, priority triage sorting,
+ *          record searching, listing directories, and patient record updating.
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -6,14 +14,37 @@
 #include "bed.h"
 #include "ui_effects.h"
 
+/* ============================================================
+   GLOBAL DATA STORAGE
+   ============================================================ */
+
+/* Global array storing registered patient records and current count */
 Patient patients[MAX_PATIENTS];
 int patientCount = 0;
 
+/* ============================================================
+   INPUT VALIDATION HELPERS
+   ============================================================ */
+
+/*
+ * Function: clearInputBuffer
+ * Purpose : Flushes stdin stream to discard trailing newline or invalid characters.
+ * Input   : None
+ * Returns : None
+ */
 void clearInputBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+/*
+ * Function: readIntBounded
+ * Purpose : Prompts for an integer input from user and enforces valid range bounds.
+ * Input   : prompt - Text prompt displayed to user.
+ *           minVal - Minimum allowable integer value.
+ *           maxVal - Maximum allowable integer value.
+ * Returns : Validated integer within range.
+ */
 int readIntBounded(const char *prompt, int minVal, int maxVal) {
     int val;
     while (1) {
@@ -27,11 +58,19 @@ int readIntBounded(const char *prompt, int minVal, int maxVal) {
     }
 }
 
+/*
+ * Function: readStringNonEmpty
+ * Purpose : Prompts for string input from user and rejects empty inputs.
+ * Input   : prompt - Display prompt.
+ *           buffer - Target char array buffer.
+ *           maxLen - Buffer size capacity.
+ * Returns : None
+ */
 void readStringNonEmpty(const char *prompt, char *buffer, int maxLen) {
     while (1) {
         printf("%s", prompt);
         if (fgets(buffer, maxLen, stdin) != NULL) {
-            buffer[strcspn(buffer, "\n")] = '\0';
+            buffer[strcspn(buffer, "\n")] = '\0'; /* Strip trailing newline */
             if (strlen(buffer) > 0) {
                 return;
             }
@@ -40,6 +79,13 @@ void readStringNonEmpty(const char *prompt, char *buffer, int maxLen) {
     }
 }
 
+/*
+ * Function: readGender
+ * Purpose : Prompts user to select Gender (1 = Male, 2 = Female) and stores string representation.
+ * Input   : buffer - Target gender buffer.
+ *           maxLen - Maximum buffer length.
+ * Returns : None
+ */
 void readGender(char *buffer, int maxLen) {
     int choice = readIntBounded("Select Gender (1 = Male, 2 = Female): ", 1, 2);
     if (choice == 1) {
@@ -50,15 +96,33 @@ void readGender(char *buffer, int maxLen) {
     buffer[maxLen - 1] = '\0';
 }
 
+/*
+ * Function: isDuplicatePatient
+ * Purpose : Scans registered patient array to detect duplicate records matching name and contact.
+ * Input   : name    - Patient full name string.
+ *           contact - Contact phone number string.
+ * Returns : 1 if duplicate exists, 0 if unique.
+ */
 int isDuplicatePatient(const char *name, const char *contact) {
     for (int i = 0; i < patientCount; i++) {
         if (strcasecmp(patients[i].name, name) == 0 && strcmp(patients[i].contact, contact) == 0) {
-            return 1;
+            return 1; /* Duplicate record found */
         }
     }
-    return 0;
+    return 0; /* Unique patient */
 }
 
+/* ============================================================
+   PATIENT REGISTRATION & INTAKE
+   ============================================================ */
+
+/*
+ * Function: registerPatient
+ * Purpose : Performs interactive patient registration intake, collects personal details,
+ *           specialty choice, urgency triage level, ward admission, and bed allocation.
+ * Input   : None
+ * Returns : None
+ */
 void registerPatient() {
     if (patientCount >= MAX_PATIENTS) {
         printf("\n[Error] Cannot register patient. Hospital system capacity reached (%d patients max).\n", MAX_PATIENTS);
@@ -71,9 +135,9 @@ void registerPatient() {
     printf("\n--- PATIENT REGISTRATION FORM (%s) ---\n", p.id);
 
     readStringNonEmpty("Enter Patient Name: ", p.name, sizeof(p.name));
-
     readStringNonEmpty("Enter Contact Number: ", p.contact, sizeof(p.contact));
 
+    /* Enforce duplicate registration prevention */
     if (isDuplicatePatient(p.name, p.contact)) {
         printf("\n[Duplicate Notice] A patient named '%s' with contact '%s' is already registered in the system.\n", p.name, p.contact);
         printf("Registration cancelled to prevent duplicate record entry.\n");
@@ -81,22 +145,25 @@ void registerPatient() {
     }
 
     p.age = readIntBounded("Enter Age (1 to 120 years): ", 1, 120);
-
     readGender(p.gender, sizeof(p.gender));
 
+    /* Select doctor specialty from lookup table */
     displaySpecialties();
     p.specialtyID = readIntBounded("Select Doctor Specialty ID (1 to 7): ", 1, 7);
 
     readStringNonEmpty("Enter Medical Condition / Visit Reason: ", p.condition, sizeof(p.condition));
 
+    /* Emergency Status: 1 = Normal OPD, 2 = Urgent, 3 = Critical Emergency */
     p.emergencyStatus = readIntBounded("Enter Emergency Status (1 = Normal OPD, 2 = Urgent, 3 = Critical Emergency): ", 1, 3);
 
+    /* Ward admission and bed allocation flow */
     p.isAdmitted = readIntBounded("Is Patient Admitted to Ward? (1 = Yes, 0 = No / OPD): ", 0, 1);
 
     if (p.isAdmitted == 1) {
         displayWards();
         p.wardID = readIntBounded("Select Ward ID (1 to 4): ", 1, 4);
 
+        /* Prompt for bed allocation prior to entering days admitted */
         int allocChoice = readIntBounded("\nAllocate a bed in selected Ward now? (1 = Auto-Allocate Bed, 0 = Skip Bed Allocation): ", 0, 1);
         if (allocChoice == 1) {
             showBedScanningAnimation(p.wardID);
@@ -137,6 +204,17 @@ void registerPatient() {
     printf("\n%s[Success] Patient '%s' registered successfully with assigned ID: %s%s\n", COLOR_GREEN, p.name, p.id, COLOR_RESET);
 }
 
+/* ============================================================
+   DIRECTORY LISTING & SEARCH
+   ============================================================ */
+
+/*
+ * Function: displayPatients
+ * Purpose : Displays a formatted directory table listing all registered patients
+ *           in registration / arrival order.
+ * Input   : None
+ * Returns : None
+ */
 void displayPatients() {
     if (patientCount == 0) {
         printf("\n%s[Information] No patients are currently registered in the system.%s\n", COLOR_CYAN, COLOR_RESET);
@@ -178,6 +256,12 @@ void displayPatients() {
     printf("%s╚══════════════╩══════════════════════╩═══════╩══════════╩═════════════════╩══════════════╩════════╩════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 }
 
+/*
+ * Function: findPatientByID
+ * Purpose : Searches patient array for a patient record matching the provided ID.
+ * Input   : patientID - Target patient ID string (e.g. PAT-1001).
+ * Returns : Pointer to matching Patient struct, or NULL if not found.
+ */
 Patient* findPatientByID(const char* patientID) {
     for (int i = 0; i < patientCount; i++) {
         if (strcmp(patients[i].id, patientID) == 0) {
@@ -187,13 +271,33 @@ Patient* findPatientByID(const char* patientID) {
     return NULL;
 }
 
+/*
+ * Function: getPatientCount
+ * Purpose : Returns total number of active patient records.
+ * Input   : None
+ * Returns : Integer count of registered patients.
+ */
 int getPatientCount() {
     return patientCount;
 }
 
+/* ============================================================
+   TRIAGE SORTING ALGORITHM
+   ============================================================ */
+
+/*
+ * Function: sortPatientsByPriority
+ * Purpose : Performs a stable Bubble Sort algorithm on a temporary patient array.
+ *           Primary Priority  : Emergency Level (Level 3 Critical -> Level 2 Urgent -> Level 1 Normal).
+ *           Secondary Priority: Arrival / Registration Order (Preserved by stable sorting).
+ * Input   : tempArray - Temporary array of Patient records.
+ *           count     - Number of patients in queue.
+ * Returns : None
+ */
 void sortPatientsByPriority(Patient tempArray[], int count) {
     for (int i = 0; i < count - 1; i++) {
         for (int j = 0; j < count - i - 1; j++) {
+            /* Higher emergency status values (3 > 2 > 1) are swapped to appear first */
             if (tempArray[j].emergencyStatus < tempArray[j + 1].emergencyStatus) {
                 Patient temp = tempArray[j];
                 tempArray[j] = tempArray[j + 1];
@@ -203,6 +307,12 @@ void sortPatientsByPriority(Patient tempArray[], int count) {
     }
 }
 
+/*
+ * Function: displayPriorityTriageQueue
+ * Purpose : Displays emergency priority triage queue with color coding and priority ranking.
+ * Input   : None
+ * Returns : None
+ */
 void displayPriorityTriageQueue() {
     if (patientCount == 0) {
         printf("\n[Information] No patients currently in triage queue.\n");
@@ -253,6 +363,16 @@ void displayPriorityTriageQueue() {
     printf("%s╚══════╩══════════════╩══════════════════════╩════════════════╩═══════╩══════════════════════╩════════╩════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 }
 
+/* ============================================================
+   SEARCH & UPDATE FUNCTIONS
+   ============================================================ */
+
+/*
+ * Function: searchPatient
+ * Purpose : Allows user to search patient records by ID string or partial name substring.
+ * Input   : None
+ * Returns : None
+ */
 void searchPatient() {
     if (patientCount == 0) {
         printf("\n[Information] No patients registered to search.\n");
@@ -316,6 +436,12 @@ void searchPatient() {
     }
 }
 
+/*
+ * Function: updatePatientRecord
+ * Purpose : Allows interactive updating of patient record fields (Name, Age, Gender, Contact, Condition, Status).
+ * Input   : None
+ * Returns : None
+ */
 void updatePatientRecord() {
     if (patientCount == 0) {
         printf("\n[Information] No patients registered to update.\n");

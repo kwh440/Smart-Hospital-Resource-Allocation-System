@@ -1,3 +1,11 @@
+/*
+ * Smart Hospital & Resource Allocation System
+ *
+ * File: bed.c
+ * Purpose: Bed occupancy matrix management, AI ward recommendation logic,
+ *          bed allocation, discharge/release operations, and visual dashboard displays.
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include "bed.h"
@@ -5,11 +13,31 @@
 #include "patient.h"
 #include "ui_effects.h"
 
+/* ============================================================
+   GLOBAL DATA STORAGE
+   ============================================================ */
+
+/* Global array storing occupancy state for all 45 hospital beds */
 Bed beds[TOTAL_BEDS_IN_HOSPITAL];
 
+/* ============================================================
+   INITIALIZATION & MATRIX RENDERING
+   ============================================================ */
+
+/*
+ * Function: initBeds
+ * Purpose : Populates initial hospital bed structures across 4 wards:
+ *           Ward 1 (General Ward)   : Beds 101-120 (20 Beds)
+ *           Ward 2 (Paediatric Ward): Beds 201-210 (10 Beds)
+ *           Ward 3 (Surgical Ward)  : Beds 301-310 (10 Beds)
+ *           Ward 4 (ICU)            : Beds 401-405 (5 Beds)
+ * Input   : None
+ * Returns : None
+ */
 void initBeds() {
     int bIndex = 0;
 
+    /* Ward 1: General Ward (Beds 101 to 120) */
     for (int i = 1; i <= 20; i++) {
         beds[bIndex].bedID = 100 + i;
         beds[bIndex].wardID = 1;
@@ -18,6 +46,7 @@ void initBeds() {
         bIndex++;
     }
 
+    /* Ward 2: Paediatric Ward (Beds 201 to 210) */
     for (int i = 1; i <= 10; i++) {
         beds[bIndex].bedID = 200 + i;
         beds[bIndex].wardID = 2;
@@ -26,6 +55,7 @@ void initBeds() {
         bIndex++;
     }
 
+    /* Ward 3: Surgical Ward (Beds 301 to 310) */
     for (int i = 1; i <= 10; i++) {
         beds[bIndex].bedID = 300 + i;
         beds[bIndex].wardID = 3;
@@ -34,6 +64,7 @@ void initBeds() {
         bIndex++;
     }
 
+    /* Ward 4: ICU (Beds 401 to 405) */
     for (int i = 1; i <= 5; i++) {
         beds[bIndex].bedID = 400 + i;
         beds[bIndex].wardID = 4;
@@ -43,6 +74,12 @@ void initBeds() {
     }
 }
 
+/*
+ * Function: displayBedMatrix
+ * Purpose : Renders a 2D grid matrix of bed availability (0 = Available [GREEN], 1 = Occupied [RED]).
+ * Input   : None
+ * Returns : None
+ */
 void displayBedMatrix() {
     displayColorLegend();
 
@@ -66,9 +103,9 @@ void displayBedMatrix() {
                 }
             }
             if (status == 1) {
-                printf(" %s1%s  ", COLOR_RED, COLOR_RESET);
+                printf(" %s1%s  ", COLOR_RED, COLOR_RESET); /* Occupied bed */
             } else {
-                printf(" %s0%s  ", COLOR_GREEN, COLOR_RESET);
+                printf(" %s0%s  ", COLOR_GREEN, COLOR_RESET); /* Available bed */
             }
         }
         printf("\n");
@@ -76,6 +113,12 @@ void displayBedMatrix() {
     printf("--------------------------------------------------------------------------------------\n");
 }
 
+/*
+ * Function: displayBoxedWardBedStatus
+ * Purpose : Renders double-line boxed bed status panels per ward.
+ * Input   : None
+ * Returns : None
+ */
 void displayBoxedWardBedStatus() {
     for (int w = 1; w <= MAX_WARDS; w++) {
         Ward *ward = getWardByID(w);
@@ -121,6 +164,12 @@ void displayBoxedWardBedStatus() {
     }
 }
 
+/*
+ * Function: displayGraphicalBedCards
+ * Purpose : Renders 5-wide horizontal graphical bed dashboard cards color-coded RED/GREEN.
+ * Input   : None
+ * Returns : None
+ */
 void displayGraphicalBedCards() {
     printf("\n%s========================================================================%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s                     GRAPHICAL BED DASHBOARD CARDS                     %s\n", COLOR_CYAN, COLOR_RESET);
@@ -184,6 +233,17 @@ void displayGraphicalBedCards() {
     }
 }
 
+/* ============================================================
+   BED STATUS TABLES & SEARCH
+   ============================================================ */
+
+/*
+ * Function: displayBeds
+ * Purpose : Displays 4 unified ward bed status tables with bed IDs, occupancy state,
+ *           assigned patient IDs, and patient names.
+ * Input   : None
+ * Returns : None
+ */
 void displayBeds() {
     displayColorLegend();
     displayBedMatrix();
@@ -240,28 +300,56 @@ void displayBeds() {
     }
 }
 
+/*
+ * Function: findAvailableBed
+ * Purpose : Searches for the first unassigned bed (status == 0) in the specified ward.
+ * Input   : wardID - Target ward ID (1 to 4).
+ * Returns : Bed ID if available, or -1 if no beds are free.
+ */
 int findAvailableBed(int wardID) {
     for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
         if (beds[i].wardID == wardID && beds[i].status == 0) {
-            return beds[i].bedID;
+            return beds[i].bedID; /* Return first available bed ID */
         }
     }
-    return -1;
+    return -1; /* All beds in ward occupied */
 }
 
+/* ============================================================
+   AI RECOMMENDATION & BED ALLOCATION
+   ============================================================ */
+
+/*
+ * Function: recommendWard
+ * Purpose : Evaluates patient emergency status and age to recommend optimal ward:
+ *           - Level 3 Critical -> Ward 4 (ICU)
+ *           - Age < 12         -> Ward 2 (Paediatric Ward)
+ *           - Level 2 Urgent   -> Ward 3 (Surgical Ward)
+ *           - Level 1 Normal   -> Ward 1 (General Ward)
+ * Input   : emergencyStatus - Urgency level (1, 2, 3).
+ *           age             - Patient age in years.
+ * Returns : Recommended Ward ID (1 to 4).
+ */
 int recommendWard(int emergencyStatus, int age) {
     if (emergencyStatus == 3) {
-        return 4; // Critical -> ICU (Ward 4)
+        return 4; /* Critical emergency -> ICU */
     }
     if (age < 12) {
-        return 2; // Child -> Pediatric Ward (Ward 2)
+        return 2; /* Child -> Paediatric Ward */
     }
     if (emergencyStatus == 2) {
-        return 3; // Urgent -> Emergency Ward (Ward 3)
+        return 3; /* Urgent medical condition -> Surgical Ward */
     }
-    return 1; // Normal -> General Ward (Ward 1)
+    return 1;     /* Normal condition -> General Ward */
 }
 
+/*
+ * Function: displayBedOccupancyMetrics
+ * Purpose : Prints ward bed utilization summary report including total, occupied,
+ *           and available bed counts along with occupancy percentages.
+ * Input   : None
+ * Returns : None
+ */
 void displayBedOccupancyMetrics() {
     displayBeds();
 
@@ -303,6 +391,13 @@ void displayBedOccupancyMetrics() {
     printf("=========================================================================\n");
 }
 
+/*
+ * Function: allocateBed
+ * Purpose : Interactively allocates an available bed to a registered patient based on
+ *           AI ward recommendation or user-selected ward.
+ * Input   : None
+ * Returns : None
+ */
 void allocateBed() {
     if (patientCount == 0) {
         printf("\n[Error] No registered patients found. Please register a patient first.\n");
@@ -324,6 +419,7 @@ void allocateBed() {
         return;
     }
 
+    /* Compute AI ward recommendation */
     int recommendedWardID = recommendWard(p->emergencyStatus, p->age);
     Ward *recWard = getWardByID(recommendedWardID);
 
@@ -357,6 +453,7 @@ void allocateBed() {
         return;
     }
 
+    /* Mark bed occupied and associate patient ID */
     for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
         if (beds[i].bedID == bedID) {
             beds[i].status = 1;
@@ -377,6 +474,17 @@ void allocateBed() {
     }
 }
 
+/* ============================================================
+   PATIENT DISCHARGE & BED RELEASE
+   ============================================================ */
+
+/*
+ * Function: releaseBed
+ * Purpose : Discharges an admitted patient, releases their allocated bed (sets status = 0),
+ *           resets assigned patient ID to "None", and restores available bed counter.
+ * Input   : None
+ * Returns : None
+ */
 void releaseBed() {
     if (patientCount == 0) {
         printf("\n[Error] No registered patients found in system.\n");
@@ -401,18 +509,19 @@ void releaseBed() {
     int oldBedID = p->bedID;
     int oldWardID = p->wardID;
 
+    /* Find allocated bed and restore to free state */
     for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
         if (beds[i].bedID == oldBedID) {
-            beds[i].status = 0; // Set bed to Available
+            beds[i].status = 0; /* Set bed status to Available */
             strcpy(beds[i].assignedPatientID, "None");
 
             Ward *w = getWardByID(oldWardID);
             if (w != NULL) {
-                w->availableBeds++; // Restore available bed count
+                w->availableBeds++; /* Increment available bed counter */
             }
 
-            p->wardID = 0; // Reset patient ward ID to OPD status
-            p->bedID = 0;  // Reset patient bed ID to OPD status
+            p->wardID = 0; /* Reset patient ward to OPD status */
+            p->bedID = 0;  /* Reset patient bed to OPD status */
 
             printf("\n[Success] Patient '%s' (%s) successfully discharged! Bed #%d in Ward #%d is now Available.\n",
                    p->name, p->id, oldBedID, oldWardID);

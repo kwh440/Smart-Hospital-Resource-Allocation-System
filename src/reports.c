@@ -1,3 +1,11 @@
+/*
+ * Smart Hospital & Resource Allocation System
+ *
+ * File: reports.c
+ * Purpose: Aggregates system analytics, triage urgency distributions, financial revenue summaries,
+ *          per-ward bed occupancy utilization percentages, and highest-paying patient identifying report.
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include "reports.h"
@@ -7,7 +15,22 @@
 #include "billing.h"
 #include "ui_effects.h"
 
+/* ============================================================
+   PERFORMANCE REPORT GENERATION
+   ============================================================ */
+
+/*
+ * Function: generatePerformanceReport
+ * Purpose : Generates a comprehensive hospital performance analytics report displaying:
+ *           1. Patient triage distribution breakdown with colored block bar charts.
+ *           2. Financial revenue analysis (Base Fees, Surcharges, Ward Costs, Discounts, Net Revenue).
+ *           3. Per-ward bed occupancy utilization percentages and block progress charts.
+ *           4. Identification of highest-paying registered patient.
+ * Input   : None
+ * Returns : None
+ */
 void generatePerformanceReport() {
+    /* Calculate total occupied beds across all hospital wards */
     int totalOccupiedBeds = 0;
     for (int i = 0; i < TOTAL_BEDS_IN_HOSPITAL; i++) {
         if (beds[i].status == 1) totalOccupiedBeds++;
@@ -15,6 +38,7 @@ void generatePerformanceReport() {
 
     showLoadingSpinner("Generating Hospital Performance Analytics Report...", 3000);
 
+    /* Render real-time hospital occupancy dashboard header */
     showHospitalStatusDisplay(patientCount, totalOccupiedBeds, TOTAL_BEDS_IN_HOSPITAL);
 
     printf("\n========================================================================\n");
@@ -27,9 +51,9 @@ void generatePerformanceReport() {
         return;
     }
 
-    // -------------------------------------------------------------------------
-    // 1. Patient Triage Breakdown (Urgency Levels)
-    // -------------------------------------------------------------------------
+    /* -------------------------------------------------------------------------
+       1. Patient Triage Breakdown (Urgency Levels)
+       ------------------------------------------------------------------------- */
     int normalCount = 0, urgentCount = 0, criticalCount = 0;
     for (int i = 0; i < patientCount; i++) {
         if (patients[i].emergencyStatus == 3) criticalCount++;
@@ -51,9 +75,9 @@ void generatePerformanceReport() {
     drawBarChart("Urgent Priority", urgentCount, patientCount, 20);
     drawBarChart("Critical Emergency", criticalCount, patientCount, 20);
 
-    // -------------------------------------------------------------------------
-    // 2. Financial Analytics & Revenue Summaries
-    // -------------------------------------------------------------------------
+    /* -------------------------------------------------------------------------
+       2. Financial Analytics & Revenue Summaries
+       ------------------------------------------------------------------------- */
     float totalBaseFees = 0.0f;
     float totalSurcharges = 0.0f;
     float totalWardCosts = 0.0f;
@@ -109,9 +133,9 @@ void generatePerformanceReport() {
     printf("----------------------------------------------------\n");
     printf(" TOTAL NET REVENUE EARNED     : LKR %12.2f\n", totalNetRevenue);
 
-    // -------------------------------------------------------------------------
-    // 3. Bed Occupancy Percentage Report Per Ward
-    // -------------------------------------------------------------------------
+    /* -------------------------------------------------------------------------
+       3. Bed Occupancy Percentage Report Per Ward
+       ------------------------------------------------------------------------- */
     printf("\n--- 3. BED OCCUPANCY & UTILIZATION METRICS ---\n");
     printf("%-8s %-20s %-12s %-12s %-12s %-12s\n",
            "Ward ID", "Ward Name", "Total Beds", "Occupied", "Available", "Occupancy %");
@@ -159,9 +183,9 @@ void generatePerformanceReport() {
         drawBarChart(ward->name, occupiedCount, ward->totalBeds, 20);
     }
 
-    // -------------------------------------------------------------------------
-    // 4. Highest-Paying Patient Summary
-    // -------------------------------------------------------------------------
+    /* -------------------------------------------------------------------------
+       4. Highest-Paying Patient Summary
+       ------------------------------------------------------------------------- */
     printf("\n--- 4. HIGHEST-PAYING PATIENT RECORD ---\n");
     if (maxPatientIndex != -1) {
         Patient topP = patients[maxPatientIndex];

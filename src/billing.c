@@ -1,3 +1,11 @@
+/*
+ * Smart Hospital & Resource Allocation System
+ *
+ * File: billing.c
+ * Purpose: Implementation of medical billing formulas, emergency surcharges,
+ *          age subsidy discounts, queue wait-time calculations, and itemized receipt exporting.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,6 +15,17 @@
 #include "bed.h"
 #include "ui_effects.h"
 
+/* ============================================================
+   BILLING FORMULA CALCULATIONS
+   ============================================================ */
+
+/*
+ * Function: calculateWardCost
+ * Purpose : Calculates total ward stay cost based on daily ward rate and admitted days.
+ * Input   : dailyRate - Daily accommodation rate of assigned ward.
+ *           days      - Number of admitted stay days.
+ * Returns : Total ward stay cost in LKR (0.0f if days <= 0).
+ */
 float calculateWardCost(float dailyRate, int days) {
     if (days <= 0) {
         return 0.0f;
@@ -14,41 +33,104 @@ float calculateWardCost(float dailyRate, int days) {
     return dailyRate * (float)days;
 }
 
+/*
+ * Function: calculateEmergencySurcharge
+ * Purpose : Calculates emergency triage surcharge based on urgency level:
+ *           - Urgency Level 1 (Normal OPD) : 0% Surcharge
+ *           - Urgency Level 2 (Urgent)     : 20% of Base Consultation Fee
+ *           - Urgency Level 3 (Critical)   : 50% of Base Consultation Fee
+ * Input   : baseFee         - Specialty base consultation fee.
+ *           emergencyStatus - Patient triage urgency level (1, 2, 3).
+ * Returns : Emergency surcharge amount in LKR.
+ */
 float calculateEmergencySurcharge(float baseFee, int emergencyStatus) {
     if (emergencyStatus == 3) {
-        return baseFee * 0.50f; // 50% Surcharge for Level 3 Critical
+        return baseFee * 0.50f; /* 50% Surcharge for Level 3 Critical emergency */
     } else if (emergencyStatus == 2) {
-        return baseFee * 0.20f; // 20% Surcharge for Level 2 Urgent (Fixed per specification)
+        return baseFee * 0.20f; /* 20% Surcharge for Level 2 Urgent case */
     }
-    return 0.0f; // 0% Surcharge for Level 1 Normal
+    return 0.0f; /* 0% Surcharge for Level 1 Normal OPD */
 }
 
+/*
+ * Function: calculateGrossTotal
+ * Purpose : Calculates basic gross bill total from ward cost and base charge.
+ * Input   : wardCost   - Total ward stay cost.
+ *           baseCharge - Base consultation charge.
+ * Returns : Sum of ward cost and base charge.
+ */
 float calculateGrossTotal(float wardCost, float baseCharge) {
     return wardCost + baseCharge;
 }
 
+/*
+ * Function: calculateGrossTotalV4
+ * Purpose : Calculates complete gross total bill:
+ *           Gross Total = Base Consultation Fee + Emergency Surcharge + Ward Stay Cost
+ * Input   : baseFee   - Base doctor consultation fee.
+ *           surcharge - Emergency surcharge amount.
+ *           wardCost  - Total ward stay cost.
+ * Returns : Gross total bill in LKR.
+ */
 float calculateGrossTotalV4(float baseFee, float surcharge, float wardCost) {
     return baseFee + surcharge + wardCost;
 }
 
+/*
+ * Function: calculateAgeSubsidy
+ * Purpose : Applies a 15% age subsidy discount on Gross Total Bill for vulnerable age groups:
+ *           - Age < 5 years (Paediatric subsidy)
+ *           - Age > 65 years (Senior citizen subsidy)
+ * Input   : grossTotal - Gross total bill amount.
+ *           age        - Patient age in years.
+ * Returns : Discount amount in LKR (0.0f if not eligible).
+ */
 float calculateAgeSubsidy(float grossTotal, int age) {
     if (age < 5 || age > 65) {
-        return grossTotal * 0.15f; // 15% Subsidy Discount
+        return grossTotal * 0.15f; /* 15% Subsidy Discount */
     }
     return 0.0f;
 }
 
+/*
+ * Function: calculateFinalAmount
+ * Purpose : Returns gross total as final amount without discount.
+ * Input   : grossTotal - Gross total bill amount.
+ * Returns : Final amount.
+ */
 float calculateFinalAmount(float grossTotal) {
     return grossTotal;
 }
 
+/*
+ * Function: calculateFinalAmountV4
+ * Purpose : Calculates final payable bill amount:
+ *           Final Amount = Gross Total - Age Subsidy Discount
+ * Input   : grossTotal - Gross total bill amount.
+ *           discount   - Age subsidy discount amount.
+ * Returns : Final payable amount in LKR.
+ */
 float calculateFinalAmountV4(float grossTotal, float discount) {
     return grossTotal - discount;
 }
 
+/* ============================================================
+   WAITING TIME ESTIMATION
+   ============================================================ */
+
+/*
+ * Function: calculateEstimatedWaitTime
+ * Purpose : Estimates consultation queue wait time based on non-critical queue size
+ *           and specialty consultation duration:
+ *           - Level 3 Critical emergency cases receive 0.00 mins (Immediate Attention).
+ *           - Other cases: Wait Time = Queue Count * Specialty Consultation Time.
+ * Input   : specialtyID     - Selected specialty ID (1 to 7).
+ *           emergencyStatus - Patient urgency level (1, 2, 3).
+ * Returns : Estimated waiting time in minutes.
+ */
 float calculateEstimatedWaitTime(int specialtyID, int emergencyStatus) {
     if (emergencyStatus == 3) {
-        return 0.0f; // Level 3 Critical case gets immediate attention (0 wait time)
+        return 0.0f; /* Critical emergency cases get immediate attention */
     }
 
     int avgTime = 15;
@@ -56,14 +138,14 @@ float calculateEstimatedWaitTime(int specialtyID, int emergencyStatus) {
         avgTime = specialties[specialtyID - 1].consultationTime;
     }
 
-    // Count non-critical patients in queue for this specialty
+    /* Count non-critical patients in queue for this specialty */
     int queueCount = 0;
     for (int i = 0; i < patientCount; i++) {
         if (patients[i].emergencyStatus != 3 && patients[i].specialtyID == specialtyID) {
             queueCount++;
         }
     }
-    // If no specialty assigned, fallback to general non-critical queue count
+    /* Fallback to general queue count if specific specialty queue count is empty */
     if (queueCount == 0) {
         for (int i = 0; i < patientCount; i++) {
             if (patients[i].emergencyStatus != 3) {
@@ -75,6 +157,18 @@ float calculateEstimatedWaitTime(int specialtyID, int emergencyStatus) {
     return (float)(queueCount * avgTime);
 }
 
+/* ============================================================
+   BILLING PROCESS & RECEIPT EXPORTING
+   ============================================================ */
+
+/*
+ * Function: processBillCalculation
+ * Purpose : Interactively calculates patient admission and consultation bills,
+ *           prompts for days admitted verification, prints itemized receipt to screen,
+ *           and exports permanent text receipt file to data/receipts/ directory.
+ * Input   : None
+ * Returns : None
+ */
 void processBillCalculation() {
     if (patientCount == 0) {
         printf("\n[Error] No registered patients found. Please register a patient first.\n");
@@ -104,6 +198,7 @@ void processBillCalculation() {
     float dailyRate = 0.0f;
     Ward *assignedWard = NULL;
 
+    /* If admitted to ward, prompt to verify or update stay duration */
     if (p->wardID > 0) {
         assignedWard = getWardByID(p->wardID);
         if (assignedWard != NULL) {
@@ -121,7 +216,7 @@ void processBillCalculation() {
         }
     }
 
-    // Perform Financial Calculations
+    /* Compute financial billing breakdown */
     float surcharge = calculateEmergencySurcharge(baseFee, p->emergencyStatus);
     float wardCost = calculateWardCost(dailyRate, daysAdmitted);
     float grossTotal = calculateGrossTotalV4(baseFee, surcharge, wardCost);
@@ -137,6 +232,7 @@ void processBillCalculation() {
 
     showLoadingSpinner("Calculating billing breakdown & subsidies...", 3000);
 
+    /* Render itemized bill statement to console */
     printf("\n========================================================================\n");
     printf("               SMART HOSPITAL ADMISSION & BILL                          \n");
     printf("========================================================================\n");
@@ -168,6 +264,7 @@ void processBillCalculation() {
     }
     printf("========================================================================\n");
 
+    /* Export billing receipt text file to data/receipts/ directory */
     #ifdef _WIN32
     system("mkdir data\\receipts 2> NUL");
     #else
