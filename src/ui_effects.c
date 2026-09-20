@@ -74,7 +74,7 @@ void displayStartupScreen() {
     printf("%s║             SMART HOSPITAL SYSTEM                  ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s║                                                    ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s║             Initializing System...                 ║%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║             [%s", COLOR_CYAN, COLOR_GREEN);
+    printf("%s║          [%s", COLOR_CYAN, COLOR_GREEN);
     fflush(stdout);
 
     int totalBlocks = 25;
@@ -83,7 +83,7 @@ void displayStartupScreen() {
         fflush(stdout);
         milliSleep(40);
     }
-    printf("%s] 100%%       %s║%s\n", COLOR_CYAN, COLOR_CYAN, COLOR_RESET);
+    printf("%s] 100%%       %s   ║%s\n", COLOR_CYAN, COLOR_CYAN, COLOR_RESET);
     printf("%s║                                                    ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s║                %sSYSTEM READY [OK]%s%s                   ║%s\n", COLOR_CYAN, COLOR_GREEN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
     printf("%s║                                                    ║%s\n", COLOR_CYAN, COLOR_RESET);

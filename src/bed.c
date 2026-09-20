@@ -449,7 +449,7 @@ void allocateBed() {
     showBedScanningAnimation(wardID);
     int bedID = findAvailableBed(wardID);
     if (bedID == -1) {
-        printf("[Allocation Error] Sorry, all beds in Ward #%d are currently full!\n", wardID);
+        printf("[Allocation Error] Sorry, all beds in Ward #%d are currently full.\n", wardID);
         return;
     }
 
@@ -467,7 +467,7 @@ void allocateBed() {
             }
 
             showBedAllocationVisual(bedID, p->id, p->name);
-            printf("\n[Success] Bed #%d in Ward #%d successfully allocated to Patient '%s' (%s)!\n",
+            printf("\n[Success] Bed #%d in Ward #%d successfully allocated to Patient '%s' (%s).\n",
                    bedID, wardID, p->name, p->id);
             return;
         }
@@ -523,7 +523,7 @@ void releaseBed() {
             p->wardID = 0; /* Reset patient ward to OPD status */
             p->bedID = 0;  /* Reset patient bed to OPD status */
 
-            printf("\n[Success] Patient '%s' (%s) successfully discharged! Bed #%d in Ward #%d is now Available.\n",
+            printf("\n[Success] Patient '%s' (%s) successfully discharged. Bed #%d in Ward #%d is now Available.\n",
                    p->name, p->id, oldBedID, oldWardID);
             return;
         }

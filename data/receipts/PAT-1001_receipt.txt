@@ -1,0 +1,20 @@
+========================================================================
+               SMART HOSPITAL ADMISSION & BILL                          
+========================================================================
+ Patient ID:              PAT-1001
+ Patient Name:            ugh
+ Age:                     33 Years (Standard Rate)
+ Specialty:               Cardiology
+ Assigned Ward:           ICU (Bed #401)
+ Urgency Level:           Level 3 (Critical)
+------------------------------------------------------------------------
+ Base Consultation Fee:   LKR    4500.00
+ Emergency Surcharge:     LKR    2250.00 (50%)
+ Ward Stay Cost (4 Days): LKR  100000.00
+------------------------------------------------------------------------
+ Gross Total Bill:        LKR  106750.00
+ Age Subsidy Discount:    LKR -     0.00 (0%%)
+------------------------------------------------------------------------
+ Final Payable Amount:    LKR  106750.00
+ Estimated Waiting Time:  0.00 mins (Immediate Attention)
+========================================================================
