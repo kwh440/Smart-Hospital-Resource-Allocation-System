@@ -1,2 +1,6 @@
-1
-PAT-1001;ugh;33;Male;77777;hjh ftfv hj;3;3;1;4;401;4
+5
+PAT-1001;Kamal Perera;50;Male;0111111110;Dengue/fewer;1;3;1;4;401;6
+PAT-1002;Amara U.;12;Male;0112344411;Eye problem;2;7;0;0;0;0
+PAT-1003;Daham Anuradha;25;Male;NaN;Vehicle Accident;1;1;1;1;101;1
+PAT-1004;Nanda Umali;40;Female;NaN;Vehicle Accident;3;1;1;4;402;3
+PAT-1005;A. Kamala V.;79;Female;0112114434;Show Dermotology Report;3;6;1;2;201;1

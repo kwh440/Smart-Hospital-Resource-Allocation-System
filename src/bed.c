@@ -353,12 +353,12 @@ int recommendWard(int emergencyStatus, int age) {
 void displayBedOccupancyMetrics() {
     displayBeds();
 
-    printf("\n=========================================================================\n");
-    printf("                  WARD BED OCCUPANCY METRICS SUMMARY                     \n");
-    printf("=========================================================================\n");
-    printf("%-8s %-20s %-12s %-12s %-12s %-12s\n",
-           "Ward ID", "Ward Name", "Total Beds", "Occupied", "Available", "Occupancy %");
-    printf("-------------------------------------------------------------------------\n");
+    printf("\n%s╔════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                 WARD BED OCCUPANCY METRICS SUMMARY                               ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s╠═════════╦══════════════════════╦════════════╦════════════╦═══════════╦═════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s Ward ID  %s║%s Ward Name            %s║%s Total Beds %s║%s Occupied   %s║%s Available %s║%s Occupancy %%  %s║%s\n",
+           COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s╠═════════╬══════════════════════╬════════════╬════════════╬═══════════╬═════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
 
     int grandTotal = 0, grandOccupied = 0, grandAvailable = 0;
 
@@ -380,15 +380,39 @@ void displayBedOccupancyMetrics() {
         grandOccupied += occupiedCount;
         grandAvailable += availCount;
 
-        printf("%-8d %-20s %-12d %-12d %-12d %-11.1f%%\n",
-               ward->wardID, ward->name, ward->totalBeds, occupiedCount, availCount, occPct);
+        printf("%s║%s %-7d %s║%s %-20s %s║%s %-10d %s║%s %-10d %s║%s %-9d %s║%s %-11.1f%% %s║%s\n",
+               COLOR_CYAN, COLOR_RESET,
+               ward->wardID,
+               COLOR_CYAN, COLOR_RESET,
+               ward->name,
+               COLOR_CYAN, COLOR_RESET,
+               ward->totalBeds,
+               COLOR_CYAN, COLOR_RESET,
+               occupiedCount,
+               COLOR_CYAN, COLOR_RESET,
+               availCount,
+               COLOR_CYAN, COLOR_RESET,
+               occPct,
+               COLOR_CYAN, COLOR_RESET);
     }
 
     float grandPct = (grandTotal > 0) ? ((float)grandOccupied / (float)grandTotal) * 100.0f : 0.0f;
-    printf("-------------------------------------------------------------------------\n");
-    printf("%-8s %-20s %-12d %-12d %-12d %-11.1f%%\n",
-           "TOTAL", "All Wards Combined", grandTotal, grandOccupied, grandAvailable, grandPct);
-    printf("=========================================================================\n");
+    printf("%s╠═════════╬══════════════════════╬════════════╬════════════╬═══════════╬═════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s %-7s %s║%s %-20s %s║%s %-10d %s║%s %-10d %s║%s %-9d %s║%s %-11.1f%% %s║%s\n",
+           COLOR_CYAN, COLOR_RESET,
+           "TOTAL",
+           COLOR_CYAN, COLOR_RESET,
+           "All Wards Combined",
+           COLOR_CYAN, COLOR_RESET,
+           grandTotal,
+           COLOR_CYAN, COLOR_RESET,
+           grandOccupied,
+           COLOR_CYAN, COLOR_RESET,
+           grandAvailable,
+           COLOR_CYAN, COLOR_RESET,
+           grandPct,
+           COLOR_CYAN, COLOR_RESET);
+    printf("%s╚═════════╩══════════════════════╩════════════╩════════════╩═══════════╩═════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 }
 
 /*

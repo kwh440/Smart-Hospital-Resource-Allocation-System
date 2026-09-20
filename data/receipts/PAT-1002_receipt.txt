@@ -1,20 +1,20 @@
 ========================================================================
                SMART HOSPITAL ADMISSION & BILL                          
 ========================================================================
- Patient ID:              PAT-1001
- Patient Name:            Kamal Perera
- Age:                     50 Years (Standard Rate)
- Specialty:               Cardiology
- Assigned Ward:           ICU (Bed #401)
- Urgency Level:           Level 1 (Normal)
+ Patient ID:              PAT-1002
+ Patient Name:            Amara U.
+ Age:                     12 Years (Standard Rate)
+ Specialty:               ENT (Ear, Nose, Throat)
+ Assigned Ward:           Outpatient (OPD - No Bed Allocated)
+ Urgency Level:           Level 2 (Urgent)
 ------------------------------------------------------------------------
- Base Consultation Fee:   LKR    4500.00
- Emergency Surcharge:     LKR       0.00 (0%)
- Ward Stay Cost (6 Days): LKR  150000.00
+ Base Consultation Fee:   LKR    3200.00
+ Emergency Surcharge:     LKR     640.00 (20%)
+ Ward Stay Cost (0 Days): LKR       0.00
 ------------------------------------------------------------------------
- Gross Total Bill:        LKR  154500.00
+ Gross Total Bill:        LKR    3840.00
  Age Subsidy Discount:    LKR -     0.00 (0%%)
 ------------------------------------------------------------------------
- Final Payable Amount:    LKR  154500.00
- Estimated Waiting Time:  30.00 mins
+ Final Payable Amount:    LKR    3840.00
+ Estimated Waiting Time:  15.00 mins
 ========================================================================

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1789849247 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
+1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
 	<stdio.h>
 	<string.h>
 	"bed.h"
@@ -7,13 +7,13 @@
 	"patient.h"
 	"ui_effects.h"
 
-1789849232 c:\users\rupik\onedrive\desktop\medical\src\bed.h
+1789878391 c:\users\rupik\onedrive\desktop\medical\src\bed.h
 
-1789849195 c:\users\rupik\onedrive\desktop\medical\src\ward.h
+1789878391 c:\users\rupik\onedrive\desktop\medical\src\ward.h
 
-1789849163 c:\users\rupik\onedrive\desktop\medical\src\patient.h
+1789878391 c:\users\rupik\onedrive\desktop\medical\src\patient.h
 
-1789849279 source:c:\users\rupik\onedrive\desktop\medical\src\billing.c
+1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\billing.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -23,9 +23,9 @@
 	"bed.h"
 	"ui_effects.h"
 
-1789849264 c:\users\rupik\onedrive\desktop\medical\src\billing.h
+1789878391 c:\users\rupik\onedrive\desktop\medical\src\billing.h
 
-1789849396 source:c:\users\rupik\onedrive\desktop\medical\src\file_manager.c
+1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\file_manager.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -35,14 +35,14 @@
 	"ward.h"
 	"ui_effects.h"
 
-1789849378 c:\users\rupik\onedrive\desktop\medical\src\file_manager.h
+1789878391 c:\users\rupik\onedrive\desktop\medical\src\file_manager.h
 
-1789849215 source:c:\users\rupik\onedrive\desktop\medical\src\ward.c
+1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\ward.c
 	<stdio.h>
 	<string.h>
 	"ward.h"
 
-1789850558 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
+1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\main.c
 	<stdio.h>
 	<stdlib.h>
 	"patient.h"
@@ -53,7 +53,7 @@
 	"file_manager.h"
 	"ui_effects.h"
 
-1789849180 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
+1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
 	<stdio.h>
 	<string.h>
 	<ctype.h>
@@ -62,9 +62,9 @@
 	"bed.h"
 	"ui_effects.h"
 
-1789849295 c:\users\rupik\onedrive\desktop\medical\src\reports.h
+1789878391 c:\users\rupik\onedrive\desktop\medical\src\reports.h
 
-1789849312 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
+1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
 	<stdio.h>
 	<string.h>
 	"reports.h"
@@ -74,9 +74,9 @@
 	"billing.h"
 	"ui_effects.h"
 
-1789849330 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
+1789878391 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
 
-1789851065 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
+1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
