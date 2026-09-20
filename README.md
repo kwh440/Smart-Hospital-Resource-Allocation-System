@@ -442,7 +442,7 @@ This project is version-controlled with Git and hosted on GitHub: [kwh440/Smart-
 
 ## 11. Author and Contribution
 
-This is an **individual project**: all design, implementation, testing and documentation were carried out by one student.
+This is an **individual project**: all design, implementation, testing and documentation were carried out by:
 
 | | |
 |---|---|
