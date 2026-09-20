@@ -198,11 +198,6 @@ Smart-Hospital-Resource-Allocation-System/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
-```
-
-> [!WARNING]
-> **PASTE HERE** — adjust the tree above (and the build command in section 3.3) if your repository layout differs.
-
 ---
 
 ## 6. System Architecture
@@ -455,9 +450,6 @@ This is an **individual project**: all design, implementation, testing and docum
 | **Student ID** | AS20250647 |
 | **GitHub** | [@kwh440](https://github.com/kwh440) |
 | **Role** | Sole developer: all eight modules, the project report and this repository |
-
-> [!WARNING]
-> **PASTE HERE** — optionally list the modules, functions and tasks you handled, and anything else you want to highlight.
 
 ---
 
