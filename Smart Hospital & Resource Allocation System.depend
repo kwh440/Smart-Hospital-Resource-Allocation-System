@@ -53,7 +53,7 @@
 	"file_manager.h"
 	"ui_effects.h"
 
-1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
+1789904222 source:c:\users\rupik\onedrive\desktop\medical\src\patient.c
 	<stdio.h>
 	<string.h>
 	<ctype.h>
@@ -76,7 +76,7 @@
 
 1789878391 c:\users\rupik\onedrive\desktop\medical\src\ui_effects.h
 
-1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
+1789904975 source:c:\users\rupik\onedrive\desktop\medical\src\ui_effects.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

@@ -199,10 +199,10 @@ void showBedAllocationVisual(int bedID, const char *patientID, const char *patie
     printf("\n%s╔════════════════════════════════════════════════════╗%s\n", COLOR_GREEN, COLOR_RESET);
     printf("%s║              BED ALLOCATION CONFIRMATION           ║%s\n", COLOR_GREEN, COLOR_RESET);
     printf("%s╠════════════════════════════════════════════════════╣%s\n", COLOR_GREEN, COLOR_RESET);
-    printf("%s║%s  BED ID ASSIGNED:   %-28d %s║%s\n", COLOR_GREEN, COLOR_RESET, bedID, COLOR_GREEN, COLOR_RESET);
-    printf("%s║%s  PATIENT ID:        %-28s %s║%s\n", COLOR_GREEN, COLOR_RESET, patientID, COLOR_GREEN, COLOR_RESET);
-    printf("%s║%s  PATIENT NAME:      %-28s %s║%s\n", COLOR_GREEN, COLOR_RESET, patientName, COLOR_GREEN, COLOR_RESET);
-    printf("%s║%s  STATUS:            %sRESERVED & OCCUPIED [CONFIRMED]%s %s║%s\n", COLOR_GREEN, COLOR_RESET, COLOR_GREEN, COLOR_RESET, COLOR_GREEN, COLOR_RESET);
+    printf("%s║%s  BED ID ASSIGNED:  %-28d    %s║%s\n", COLOR_GREEN, COLOR_RESET, bedID, COLOR_GREEN, COLOR_RESET);
+    printf("%s║%s  PATIENT ID:       %-28s    %s║%s\n", COLOR_GREEN, COLOR_RESET, patientID, COLOR_GREEN, COLOR_RESET);
+    printf("%s║%s  PATIENT NAME:     %-28s    %s║%s\n", COLOR_GREEN, COLOR_RESET, patientName, COLOR_GREEN, COLOR_RESET);
+    printf("%s║%s  STATUS:           %sRESERVED & OCCUPIED [CONFIRMED]%s %s║%s\n", COLOR_GREEN, COLOR_RESET, COLOR_GREEN, COLOR_RESET, COLOR_GREEN, COLOR_RESET);
     printf("%s╚════════════════════════════════════════════════════╝%s\n", COLOR_GREEN, COLOR_RESET);
 }
 

@@ -10,11 +10,11 @@
 ------------------------------------------------------------------------
  Base Consultation Fee:   LKR    4500.00
  Emergency Surcharge:     LKR       0.00 (0%)
- Ward Stay Cost (6 Days): LKR  150000.00
+ Ward Stay Cost (4 Days): LKR  100000.00
 ------------------------------------------------------------------------
- Gross Total Bill:        LKR  154500.00
+ Gross Total Bill:        LKR  104500.00
  Age Subsidy Discount:    LKR -     0.00 (0%%)
 ------------------------------------------------------------------------
- Final Payable Amount:    LKR  154500.00
+ Final Payable Amount:    LKR  104500.00
  Estimated Waiting Time:  30.00 mins
 ========================================================================
