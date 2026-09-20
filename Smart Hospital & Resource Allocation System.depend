@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
+1789888787 source:c:\users\rupik\onedrive\desktop\medical\src\bed.c
 	<stdio.h>
 	<string.h>
 	"bed.h"
@@ -25,7 +25,7 @@
 
 1789878391 c:\users\rupik\onedrive\desktop\medical\src\billing.h
 
-1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\file_manager.c
+1789887301 source:c:\users\rupik\onedrive\desktop\medical\src\file_manager.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -64,7 +64,7 @@
 
 1789878391 c:\users\rupik\onedrive\desktop\medical\src\reports.h
 
-1789878391 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
+1789889392 source:c:\users\rupik\onedrive\desktop\medical\src\reports.c
 	<stdio.h>
 	<string.h>
 	"reports.h"

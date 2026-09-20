@@ -354,9 +354,9 @@ void displayBedOccupancyMetrics() {
     displayBeds();
 
     printf("\n%s╔════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║                 WARD BED OCCUPANCY METRICS SUMMARY                               ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                 WARD BED OCCUPANCY METRICS SUMMARY                                 ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s╠═════════╦══════════════════════╦════════════╦════════════╦═══════════╦═════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║%s Ward ID  %s║%s Ward Name            %s║%s Total Beds %s║%s Occupied   %s║%s Available %s║%s Occupancy %%  %s║%s\n",
+    printf("%s║%s Ward ID %s║%s Ward Name            %s║%s Total Beds %s║%s Occupied   %s║%s Available %s║%s Occupancy %% %s║%s\n",
            COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
     printf("%s╠═════════╬══════════════════════╬════════════╬════════════╬═══════════╬═════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
 
@@ -380,7 +380,7 @@ void displayBedOccupancyMetrics() {
         grandOccupied += occupiedCount;
         grandAvailable += availCount;
 
-        printf("%s║%s %-7d %s║%s %-20s %s║%s %-10d %s║%s %-10d %s║%s %-9d %s║%s %-11.1f%% %s║%s\n",
+        printf("%s║%s %-7d %s║%s %-20s %s║%s %-10d %s║%s %-10d %s║%s %-9d %s║%s %-11.1f%%%s║%s\n",
                COLOR_CYAN, COLOR_RESET,
                ward->wardID,
                COLOR_CYAN, COLOR_RESET,
@@ -398,7 +398,7 @@ void displayBedOccupancyMetrics() {
 
     float grandPct = (grandTotal > 0) ? ((float)grandOccupied / (float)grandTotal) * 100.0f : 0.0f;
     printf("%s╠═════════╬══════════════════════╬════════════╬════════════╬═══════════╬═════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║%s %-7s %s║%s %-20s %s║%s %-10d %s║%s %-10d %s║%s %-9d %s║%s %-11.1f%% %s║%s\n",
+    printf("%s║%s %-7s %s║%s %-20s %s║%s %-10d %s║%s %-10d %s║%s %-9d %s║%s %-11.1f%%%s║%s\n",
            COLOR_CYAN, COLOR_RESET,
            "TOTAL",
            COLOR_CYAN, COLOR_RESET,

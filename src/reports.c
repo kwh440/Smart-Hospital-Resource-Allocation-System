@@ -42,7 +42,7 @@ void generatePerformanceReport() {
     showHospitalStatusDisplay(patientCount, totalOccupiedBeds, TOTAL_BEDS_IN_HOSPITAL);
 
     printf("\n%s╔════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║               SMART HOSPITAL SYSTEM - PERFORMANCE & ANALYTICS REPORT             ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                SMART HOSPITAL SYSTEM - PERFORMANCE & ANALYTICS REPORT              ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s╚════════════════════════════════════════════════════════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 
     if (patientCount == 0) {
@@ -70,12 +70,12 @@ void generatePerformanceReport() {
     snprintf(buf3, sizeof(buf3), "%d (%.1f%%)", criticalCount, criticalPct);
 
     printf("\n%s╔════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║                       1. PATIENT REGISTRATION & TRIAGE SUMMARY                   ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                       1. PATIENT REGISTRATION & TRIAGE SUMMARY                     ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s╠════════════════════════════════════════════════════════════════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║%s  Total Patients Registered : %-54d %s║%s\n", COLOR_CYAN, COLOR_RESET, patientCount, COLOR_CYAN, COLOR_RESET);
-    printf("%s║%s   - Level 1 (Normal OPD)  : %s%-55s%s %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_GREEN, buf1, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
-    printf("%s║%s   - Level 2 (Urgent)      : %s%-55s%s %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_YELLOW, buf2, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
-    printf("%s║%s   - Level 3 (Critical)    : %s%-55s%s %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_RED, buf3, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s Total Patients Registered : %-54d %s║%s\n", COLOR_CYAN, COLOR_RESET, patientCount, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s   - Level 1 (Normal OPD)  : %s%-55s%s%s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_GREEN, buf1, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s   - Level 2 (Urgent)      : %s%-55s%s%s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_YELLOW, buf2, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s   - Level 3 (Critical)    : %s%-55s%s%s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_RED, buf3, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
     printf("%s╚════════════════════════════════════════════════════════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 
     printf("\n%s[Triage Distribution Chart]%s\n", COLOR_CYAN, COLOR_RESET);
@@ -132,7 +132,7 @@ void generatePerformanceReport() {
     }
 
     printf("\n%s╔════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║                       2. FINANCIAL REVENUE & DISCOUNT SUMMARY                    ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                       2. FINANCIAL REVENUE & DISCOUNT SUMMARY                      ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s╠════════════════════════════════════════════════════════════════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s║%s  Total Base Consultation Fees : LKR %12.2f                                   %s║%s\n", COLOR_CYAN, COLOR_RESET, totalBaseFees, COLOR_CYAN, COLOR_RESET);
     printf("%s║%s  Total Emergency Surcharges   : LKR %12.2f                                   %s║%s\n", COLOR_CYAN, COLOR_RESET, totalSurcharges, COLOR_CYAN, COLOR_RESET);
@@ -148,9 +148,9 @@ void generatePerformanceReport() {
        3. Bed Occupancy Percentage Report Per Ward
        ------------------------------------------------------------------------- */
     printf("\n%s╔════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║                 3. BED OCCUPANCY & UTILIZATION METRICS SUMMARY                   ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                 3. BED OCCUPANCY & UTILIZATION METRICS SUMMARY                     ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s╠═════════╦══════════════════════╦════════════╦════════════╦═══════════╦═════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║%s Ward ID  %s║%s Ward Name            %s║%s Total Beds %s║%s Occupied   %s║%s Available %s║%s Occupancy %%  %s║%s\n",
+    printf("%s║%s Ward ID %s║%s Ward Name            %s║%s Total Beds %s║%s Occupied   %s║%s Available %s║%s Occupancy %% %s║%s\n",
            COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
     printf("%s╠═════════╬══════════════════════╬════════════╬════════════╬═══════════╬═════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
 
@@ -174,7 +174,7 @@ void generatePerformanceReport() {
         grandOccupied += occupiedCount;
         grandAvailable += availCount;
 
-        printf("%s║%s %-7d %s║%s %-20s %s║%s %-10d %s║%s %-10d %s║%s %-9d %s║%s %-11.1f%% %s║%s\n",
+        printf("%s║%s %-7d %s║%s %-20s %s║%s %-10d %s║%s %-10d %s║%s %-9d %s║%s %-11.1f%%%s║%s\n",
                COLOR_CYAN, COLOR_RESET,
                ward->wardID,
                COLOR_CYAN, COLOR_RESET,
@@ -192,7 +192,7 @@ void generatePerformanceReport() {
 
     float grandPct = (grandTotal > 0) ? ((float)grandOccupied / (float)grandTotal) * 100.0f : 0.0f;
     printf("%s╠═════════╬══════════════════════╬════════════╬════════════╬═══════════╬═════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║%s %-7s %s║%s %-20s %s║%s %-10d %s║%s %-10d %s║%s %-9d %s║%s %-11.1f%% %s║%s\n",
+    printf("%s║%s %-7s %s║%s %-20s %s║%s %-10d %s║%s %-10d %s║%s %-9d %s║%s %-11.1f%%%s║%s\n",
            COLOR_CYAN, COLOR_RESET,
            "TOTAL",
            COLOR_CYAN, COLOR_RESET,
