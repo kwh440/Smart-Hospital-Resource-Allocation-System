@@ -222,7 +222,7 @@ void displayPatients() {
     }
 
     printf("\n%s╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║                                    REGISTERED PATIENTS DIRECTORY                                     ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                                    REGISTERED PATIENTS DIRECTORY                                          ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s╠══════════════╦══════════════════════╦═══════╦══════════╦═════════════════╦══════════════╦════════╦════════╣%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s║%s Patient ID   %s║%s Name                 %s║%s Age   %s║%s Gender %s  ║%s Contact       %s  ║%s Status       %s║%s Ward   %s║%s Bed    %s║%s\n",
            COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
@@ -328,8 +328,8 @@ void displayPriorityTriageQueue() {
     showTriageQueueSortingAnimation();
     displayColorLegend();
 
-    printf("\n%s╔══════════════════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
-    printf("%s║                                EMERGENCY TRIAGE PRIORITY QUEUE                                   ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("\n%s╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                                EMERGENCY TRIAGE PRIORITY QUEUE                                               ║%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s╠══════╦══════════════╦══════════════════════╦════════════════╦═══════╦══════════════════════╦════════╦════════╣%s\n", COLOR_CYAN, COLOR_RESET);
     printf("%s║%s #    %s║%s Patient ID   %s║%s Name                 %s║%s Priority       %s║%s Age   %s║%s Medical Condition    %s║%s Ward   %s║%s Bed    %s║%s\n",
            COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET, COLOR_CYAN, COLOR_RESET);

@@ -232,37 +232,50 @@ void processBillCalculation() {
 
     showLoadingSpinner("Calculating billing breakdown & subsidies...", 3000);
 
-    /* Render itemized bill statement to console */
-    printf("\n========================================================================\n");
-    printf("               SMART HOSPITAL ADMISSION & BILL                          \n");
-    printf("========================================================================\n");
-    printf(" Patient ID:              %s\n", p->id);
-    printf(" Patient Name:            %s\n", p->name);
-    printf(" Age:                     %d Years %s\n", p->age, isSubsidyEligible ? "(15% Subsidy Eligible)" : "(Standard Rate)");
-    printf(" Specialty:               %s\n", specialties[specialtyID - 1].name);
-    
+    char ageStr[60];
+    snprintf(ageStr, sizeof(ageStr), "%d Years %s", p->age, isSubsidyEligible ? "(15%% Subsidy Eligible)" : "(Standard Rate)");
+
+    char wardStr[80];
     if (p->wardID > 0) {
-        printf(" Assigned Ward:           %s (Bed #%d)\n", assignedWard ? assignedWard->name : "Admitted", p->bedID);
+        snprintf(wardStr, sizeof(wardStr), "%s (Bed #%d)", assignedWard ? assignedWard->name : "Admitted", p->bedID);
     } else {
-        printf(" Assigned Ward:           Outpatient (OPD - No Bed Allocated)\n");
+        snprintf(wardStr, sizeof(wardStr), "Outpatient (OPD - No Bed Allocated)");
     }
 
-    printf(" Urgency Level:           %s\n", urgencyStr);
-    printf("------------------------------------------------------------------------\n");
-    printf(" Base Consultation Fee:   LKR %10.2f\n", baseFee);
-    printf(" Emergency Surcharge:     LKR %10.2f (%s)\n", surcharge, surchargePctStr);
-    printf(" Ward Stay Cost (%d Days): LKR %10.2f\n", daysAdmitted, wardCost);
-    printf("------------------------------------------------------------------------\n");
-    printf(" Gross Total Bill:        LKR %10.2f\n", grossTotal);
-    printf(" Age Subsidy Discount:    LKR -%9.2f %s\n", discount, isSubsidyEligible ? "(15%)" : "(0%)");
-    printf("------------------------------------------------------------------------\n");
-    printf(" Final Payable Amount:    LKR %10.2f\n", finalAmount);
+    char surStr[20];
+    snprintf(surStr, sizeof(surStr), "(%s)", surchargePctStr);
+
+    char wardCostLabel[40];
+    snprintf(wardCostLabel, sizeof(wardCostLabel), "Ward Stay Cost (%d Days):", daysAdmitted);
+
+    char waitStr[60];
     if (p->emergencyStatus == 3) {
-        printf(" Estimated Waiting Time:  0.00 mins (Immediate Attention)\n");
+        snprintf(waitStr, sizeof(waitStr), "0.00 mins (Immediate Attention)");
     } else {
-        printf(" Estimated Waiting Time:  %.2f mins\n", waitTime);
+        snprintf(waitStr, sizeof(waitStr), "%.2f mins", waitTime);
     }
-    printf("========================================================================\n");
+
+    /* Render itemized bill statement to console */
+    printf("\n%s╔════════════════════════════════════════════════════════════════════════════════════╗%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║                     SMART HOSPITAL ADMISSION & BILL                                ║%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s╠════════════════════════════════════════════════════════════════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Patient ID:              %-52s     %s║%s\n", COLOR_CYAN, COLOR_RESET, p->id, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Patient Name:            %-52s     %s║%s\n", COLOR_CYAN, COLOR_RESET, p->name, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Age:                     %-52s     %s║%s\n", COLOR_CYAN, COLOR_RESET, ageStr, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Specialty:               %-52s     %s║%s\n", COLOR_CYAN, COLOR_RESET, specialties[specialtyID - 1].name, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Assigned Ward:           %-52s     %s║%s\n", COLOR_CYAN, COLOR_RESET, wardStr, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Urgency Level:           %-52s     %s║%s\n", COLOR_CYAN, COLOR_RESET, urgencyStr, COLOR_CYAN, COLOR_RESET);
+    printf("%s╠════════════════════════════════════════════════════════════════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Base Consultation Fee:   LKR %10.2f                                           %s║%s\n", COLOR_CYAN, COLOR_RESET, baseFee, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Emergency Surcharge:     LKR %10.2f %-7s                                   %s║%s\n", COLOR_CYAN, COLOR_RESET, surcharge, surStr, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  %-26s LKR %10.2f                                         %s║%s\n", COLOR_CYAN, COLOR_RESET, wardCostLabel, wardCost, COLOR_CYAN, COLOR_RESET);
+    printf("%s╠════════════════════════════════════════════════════════════════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Gross Total Bill:        LKR %10.2f                                           %s║%s\n", COLOR_CYAN, COLOR_RESET, grossTotal, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Age Subsidy Discount:    %sLKR -%9.2f%s %-7s                                   %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_YELLOW, discount, COLOR_RESET, isSubsidyEligible ? "(15%)" : "(0%)", COLOR_CYAN, COLOR_RESET);
+    printf("%s╠════════════════════════════════════════════════════════════════════════════════════╣%s\n", COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Final Payable Amount:    %sLKR %10.2f%s                                           %s║%s\n", COLOR_CYAN, COLOR_RESET, COLOR_GREEN, finalAmount, COLOR_RESET, COLOR_CYAN, COLOR_RESET);
+    printf("%s║%s  Estimated Waiting Time:  %-52s     %s║%s\n", COLOR_CYAN, COLOR_RESET, waitStr, COLOR_CYAN, COLOR_RESET);
+    printf("%s╚════════════════════════════════════════════════════════════════════════════════════╝%s\n", COLOR_CYAN, COLOR_RESET);
 
     /* Export billing receipt text file to data/receipts/ directory */
     #ifdef _WIN32
@@ -304,6 +317,6 @@ void processBillCalculation() {
         }
         fprintf(rf, "========================================================================\n");
         fclose(rf);
-        printf("\n%s[Receipt Export]%s Itemized bill saved to '%s'%s\n", COLOR_CYAN, COLOR_GREEN, filename, COLOR_RESET);
+        printf("\n%s[Receipt Export]%s Itemized bill saved to the database.%s\n", COLOR_CYAN, COLOR_GREEN, COLOR_RESET);
     }
 }
